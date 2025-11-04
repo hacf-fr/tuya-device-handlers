@@ -1,0 +1,47 @@
+# serializer version: 1
+# name: test_entities[cl_g1cp07dsqnbdbbki.json][control_back_mode-definition]
+  dict({
+    'device_class': None,
+    'entity_category': <TuyaEntityCategory.CONFIG: 'config'>,
+    'key': <TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>,
+    'state_translations': dict({
+      'back': 'Back',
+      'forward': 'Forward',
+    }),
+    'translation_key': 'curtain_motor_mode',
+    'translation_string': 'Motor mode',
+  })
+# ---
+# name: test_entities[cl_g1cp07dsqnbdbbki.json][control_back_mode-state]
+  dict({
+    'dp_code': <TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>,
+    'options': list([
+      'forward',
+      'back',
+    ]),
+    'state': 'back',
+  })
+# ---
+# name: test_entities[cl_lfkr93x0ukp5gaia.json][control_back_mode-definition]
+  dict({
+    'device_class': None,
+    'entity_category': <TuyaEntityCategory.CONFIG: 'config'>,
+    'key': <TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>,
+    'state_translations': dict({
+      'back': 'Back',
+      'forward': 'Forward',
+    }),
+    'translation_key': 'curtain_motor_mode',
+    'translation_string': 'Motor mode',
+  })
+# ---
+# name: test_entities[cl_lfkr93x0ukp5gaia.json][control_back_mode-state]
+  dict({
+    'dp_code': <TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>,
+    'options': list([
+      'forward',
+      'back',
+    ]),
+    'state': 'forward',
+  })
+# ---

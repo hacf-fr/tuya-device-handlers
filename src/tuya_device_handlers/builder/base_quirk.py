@@ -4,36 +4,42 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+import functools
 import inspect
 import pathlib
-from typing import TYPE_CHECKING, Any, Self
+from typing import TYPE_CHECKING, Self
 
 from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
     TuyaDeviceCategory,
-    TuyaDPCode,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
+    get_dp_enum_definition,
+    get_dp_type_definition,
 )
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
-    from tuya_device_handlers.helpers import TuyaIntegerTypeDefinition
+    from tuya_device_handlers.helpers import (
+        TuyaEnumTypeDefinition,
+        TuyaIntegerTypeDefinition,
+        TuyaTypeDefinition,
+    )
     from tuya_device_handlers.registry import QuirksRegistry
 
-
-type TuyaIntegerConversionFunction = Callable[
-    [CustomerDevice, TuyaIntegerTypeDefinition, Any], Any
+type TuyaEnumTypeGenerator = Callable[
+    [CustomerDevice], TuyaEnumTypeDefinition | None
 ]
-"""Start conversion function:
+type TuyaIntegerTypeGenerator = Callable[
+    [CustomerDevice], TuyaIntegerTypeDefinition | None
+]
+type TuyaTypeGenerator = Callable[[CustomerDevice], TuyaTypeDefinition | None]
 
-    Args:
-        device: The Tuya device instance (CustomerDevice).
-        dptype: The DP type definition (TuyaIntegerTypeDefinition).
-        value: The value to convert.
-"""
+
+def _none_type_generator(device: CustomerDevice) -> None:
+    return None
 
 
 @dataclass
@@ -54,17 +60,8 @@ class TuyaClimateDefinition(BaseTuyaDefinition):
 
     switch_only_hvac_mode: TuyaClimateHVACMode
 
-    current_temperature_dp_code: TuyaDPCode | None = None
-    current_temperature_state_conversion: (
-        TuyaIntegerConversionFunction | None
-    ) = None
-    target_temperature_dp_code: TuyaDPCode | None = None
-    target_temperature_state_conversion: (
-        TuyaIntegerConversionFunction | None
-    ) = None
-    target_temperature_command_conversion: (
-        TuyaIntegerConversionFunction | None
-    ) = None
+    current_temperature_dp_type: TuyaIntegerTypeGenerator
+    target_temperature_dp_type: TuyaIntegerTypeGenerator
 
 
 @dataclass(kw_only=True)
@@ -73,20 +70,24 @@ class TuyaCoverDefinition(BaseTuyaDefinition):
 
     device_class: TuyaCoverDeviceClass | None = None
 
-    current_state_dp_code: str | None = None
-    current_position_dp_code: str | None = None
-    set_position_dp_code: str | None = None
+    get_state_dp_type: TuyaEnumTypeGenerator
+    set_state_dp_type: TuyaEnumTypeGenerator
+    get_position_dp_type: TuyaIntegerTypeGenerator
+    set_position_dp_type: TuyaIntegerTypeGenerator
 
 
 @dataclass(kw_only=True)
 class TuyaSelectDefinition(BaseTuyaDefinition):
     """Definition for a select entity."""
 
+    dp_type: TuyaEnumTypeGenerator
+
 
 @dataclass(kw_only=True)
 class TuyaSensorDefinition(BaseTuyaDefinition):
     """Definition for a sensor entity."""
 
+    dp_type: TuyaTypeGenerator
     device_class: TuyaSensorDeviceClass | None = None
 
 
@@ -134,25 +135,16 @@ class TuyaDeviceQuirk:
         key: str,
         # Climate specific
         switch_only_hvac_mode: TuyaClimateHVACMode,
-        current_temperature_dp_code: TuyaDPCode | None = None,
-        current_temperature_state_conversion: TuyaIntegerConversionFunction
-        | None = None,
-        target_temperature_dp_code: TuyaDPCode | None = None,
-        target_temperature_state_conversion: TuyaIntegerConversionFunction
-        | None = None,
-        target_temperature_command_conversion: TuyaIntegerConversionFunction
-        | None = None,
+        current_temperature_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
+        target_temperature_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
     ) -> Self:
         """Add climate definition."""
         self.climate_definitions.append(
             TuyaClimateDefinition(
                 key=key,
                 switch_only_hvac_mode=switch_only_hvac_mode,
-                current_temperature_dp_code=current_temperature_dp_code,
-                current_temperature_state_conversion=current_temperature_state_conversion,
-                target_temperature_dp_code=target_temperature_dp_code,
-                target_temperature_state_conversion=target_temperature_state_conversion,
-                target_temperature_command_conversion=target_temperature_command_conversion,
+                current_temperature_dp_type=current_temperature_dp_type,
+                target_temperature_dp_type=target_temperature_dp_type,
             )
         )
         return self
@@ -160,25 +152,28 @@ class TuyaDeviceQuirk:
     def add_cover(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
         translation_key: str,
         translation_string: str,
         device_class: TuyaCoverDeviceClass | None = None,
         # Cover specific
-        current_state_dp_code: TuyaDPCode | None = None,
-        current_position_dp_code: TuyaDPCode | None = None,
-        set_position_dp_code: TuyaDPCode | None = None,
+        get_state_dp_type: TuyaEnumTypeGenerator = _none_type_generator,
+        set_state_dp_type: TuyaEnumTypeGenerator = _none_type_generator,
+        get_position_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
+        set_position_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
     ) -> Self:
         """Add cover definition."""
+
         self.cover_definitions.append(
             TuyaCoverDefinition(
                 key=key,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 device_class=device_class,
-                current_state_dp_code=current_state_dp_code,
-                current_position_dp_code=current_position_dp_code,
-                set_position_dp_code=set_position_dp_code,
+                get_state_dp_type=get_state_dp_type,
+                set_state_dp_type=set_state_dp_type,
+                get_position_dp_type=get_position_dp_type,
+                set_position_dp_type=set_position_dp_type,
             )
         )
         return self
@@ -186,7 +181,8 @@ class TuyaDeviceQuirk:
     def add_select(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
+        dp_type: TuyaEnumTypeGenerator | None = None,
         translation_key: str,
         translation_string: str,
         entity_category: TuyaEntityCategory | None = None,
@@ -194,9 +190,12 @@ class TuyaDeviceQuirk:
         state_translations: dict[str, str] | None = None,
     ) -> Self:
         """Add select definition."""
+        if dp_type is None:
+            dp_type = functools.partial(get_dp_enum_definition, dp_code=key)
         self.select_definitions.append(
             TuyaSelectDefinition(
                 key=key,
+                dp_type=dp_type,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 entity_category=entity_category,
@@ -208,7 +207,8 @@ class TuyaDeviceQuirk:
     def add_sensor(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
+        dp_type: TuyaTypeGenerator | None = None,
         translation_key: str,
         translation_string: str,
         device_class: TuyaSensorDeviceClass | None = None,
@@ -216,9 +216,12 @@ class TuyaDeviceQuirk:
         # Sensor specific
     ) -> Self:
         """Add sensor definition."""
+        if dp_type is None:
+            dp_type = functools.partial(get_dp_type_definition, dp_code=key)
         self.sensor_definitions.append(
             TuyaSensorDefinition(
                 key=key,
+                dp_type=dp_type,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 device_class=device_class,
@@ -230,7 +233,7 @@ class TuyaDeviceQuirk:
     def add_switch(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
         translation_key: str,
         translation_string: str,
         entity_category: TuyaEntityCategory | None = None,

@@ -150,7 +150,7 @@ def mypy(session: Session) -> None:
     """Type-check using mypy."""
     args = session.posargs or ["src", "tests", "docs/conf.py"]
     session.install(".[cli]")
-    session.install("mypy", "pytest")
+    session.install("mypy", "pytest", "cryptography", "syrupy")
     session.run("mypy", *args)
     if not session.posargs:
         session.run(
@@ -162,7 +162,14 @@ def mypy(session: Session) -> None:
 def tests(session: Session) -> None:
     """Run the test suite."""
     session.install(".[cli]")
-    session.install("coverage[toml]", "pytest", "pygments", "pytest-asyncio")
+    session.install(
+        "coverage[toml]",
+        "pytest",
+        "pygments",
+        "pytest-asyncio",
+        "cryptography",
+        "syrupy",
+    )
     try:
         session.run(
             "coverage", "run", "--parallel", "-m", "pytest", *session.posargs
@@ -189,7 +196,14 @@ def coverage(session: Session) -> None:
 def typeguard(session: Session) -> None:
     """Runtime type checking using Typeguard."""
     session.install(".[cli]")
-    session.install("pytest", "typeguard", "pygments", "pytest-asyncio")
+    session.install(
+        "pytest",
+        "typeguard",
+        "pygments",
+        "pytest-asyncio",
+        "cryptography",
+        "syrupy",
+    )
     session.run("pytest", f"--typeguard-packages={package}", *session.posargs)
 
 
