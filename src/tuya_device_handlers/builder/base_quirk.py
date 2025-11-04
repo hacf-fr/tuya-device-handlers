@@ -55,6 +55,7 @@ class BaseTuyaDefinition:
     state_translations: dict[str, str] | None = None
     device_class: str | None = None
     entity_category: str | None = None
+    entity_registry_enabled_default: bool = False
 
 
 @dataclass(kw_only=True)
