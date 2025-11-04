@@ -15,6 +15,8 @@ from tuya_device_handlers.helpers import (
     TuyaDeviceCategory,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
+    TuyaSensorStateClass,
+    TuyaSwitchDeviceClass,
     get_dp_enum_definition,
     get_dp_type_definition,
 )
@@ -48,6 +50,7 @@ class BaseTuyaDefinition:
 
     key: str
     translation_key: str | None = None
+    translation_placeholders: dict[str, str] | None = None
     translation_string: str | None = None
     state_translations: dict[str, str] | None = None
     device_class: str | None = None
@@ -89,11 +92,14 @@ class TuyaSensorDefinition(BaseTuyaDefinition):
 
     dp_type: TuyaTypeGenerator
     device_class: TuyaSensorDeviceClass | None = None
+    state_class: TuyaSensorStateClass | None = None
 
 
 @dataclass(kw_only=True)
 class TuyaSwitchDefinition(BaseTuyaDefinition):
     """Definition for a switch entity."""
+
+    device_class: TuyaSwitchDeviceClass | None = None
 
 
 class TuyaDeviceQuirk:
@@ -209,10 +215,11 @@ class TuyaDeviceQuirk:
         *,
         key: str,
         dp_type: TuyaTypeGenerator | None = None,
-        translation_key: str,
-        translation_string: str,
+        translation_key: str | None = None,
+        translation_string: str | None = None,
         device_class: TuyaSensorDeviceClass | None = None,
         entity_category: TuyaEntityCategory | None = None,
+        state_class: TuyaSensorStateClass | None = None,
         # Sensor specific
     ) -> Self:
         """Add sensor definition."""
@@ -226,6 +233,7 @@ class TuyaDeviceQuirk:
                 translation_string=translation_string,
                 device_class=device_class,
                 entity_category=entity_category,
+                state_class=state_class,
             )
         )
         return self
@@ -236,6 +244,8 @@ class TuyaDeviceQuirk:
         key: str,
         translation_key: str,
         translation_string: str,
+        translation_placeholders: dict[str, str] | None = None,
+        device_class: TuyaSwitchDeviceClass | None = None,
         entity_category: TuyaEntityCategory | None = None,
         # Switch specific
     ) -> Self:
@@ -245,6 +255,8 @@ class TuyaDeviceQuirk:
                 key=key,
                 translation_key=translation_key,
                 translation_string=translation_string,
+                translation_placeholders=translation_placeholders,
+                device_class=device_class,
                 entity_category=entity_category,
             )
         )
