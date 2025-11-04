@@ -3,17 +3,40 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+from .const import TuyaDPType
+
+if TYPE_CHECKING:
+    from tuya_sharing import DeviceFunction, DeviceStatusRange
+
+
+@dataclass(kw_only=True)
+class TuyaDataPointDefinition:
+    """Definition of a data point type."""
+
+    dp_code: str
+    dp_type: TuyaDPType | None
+    specs: DeviceFunction | DeviceStatusRange
+
+
+@dataclass
+class TuyaEnumTypeDefinition:
+    """Definition of an integer type data."""
+
+    dp_code: str
+    range: list[str]
 
 
 @dataclass
 class TuyaIntegerTypeDefinition:
     """Definition of an integer type data."""
 
-    dpcode: str
+    dp_code: str
     min: int
     max: int
-    scale: float
-    step: float
+    scale: int
+    step: int
     unit: str | None = None
     type: str | None = None
 
@@ -30,9 +53,9 @@ class TuyaIntegerTypeDefinition:
     @property
     def step_scaled(self) -> float:
         """Return the step scaled."""
-        return self.step / (10**self.scale)
+        return self.scale_value(self.step)
 
-    def scale_value(self, value: float) -> float:
+    def scale_value(self, value: int) -> float:
         """Scale a value."""
         return value / (10**self.scale)
 

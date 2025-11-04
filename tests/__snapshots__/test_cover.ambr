@@ -1,0 +1,37 @@
+# serializer version: 1
+# name: test_entities[cl_g1cp07dsqnbdbbki.json][control-definition]
+  dict({
+    'current_position_dp_code': <TuyaDPCode.PERCENT_CONTROL: 'percent_control'>,
+    'current_state_dp_code': <TuyaDPCode.CONTROL: 'control'>,
+    'device_class': <TuyaCoverDeviceClass.CURTAIN: 'curtain'>,
+    'entity_category': None,
+    'key': <TuyaDPCode.CONTROL: 'control'>,
+    'set_position_dp_code': <TuyaDPCode.PERCENT_CONTROL: 'percent_control'>,
+    'state_translations': None,
+    'translation_key': 'curtain',
+    'translation_string': '[%key:component::cover::entity_component::curtain::name%]',
+  })
+# ---
+# name: test_entities[cl_g1cp07dsqnbdbbki.json][control-state]
+  dict({
+    'state': 'open',
+  })
+# ---
+# name: test_entities[cl_lfkr93x0ukp5gaia.json][control-definition]
+  dict({
+    'current_position_dp_code': None,
+    'current_state_dp_code': <TuyaDPCode.CONTROL: 'control'>,
+    'device_class': <TuyaCoverDeviceClass.CURTAIN: 'curtain'>,
+    'entity_category': None,
+    'key': <TuyaDPCode.CONTROL: 'control'>,
+    'set_position_dp_code': None,
+    'state_translations': None,
+    'translation_key': 'curtain',
+    'translation_string': '[%key:component::cover::entity_component::curtain::name%]',
+  })
+# ---
+# name: test_entities[cl_lfkr93x0ukp5gaia.json][control-state]
+  dict({
+    'state': 'close',
+  })
+# ---

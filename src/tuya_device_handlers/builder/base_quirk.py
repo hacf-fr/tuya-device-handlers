@@ -27,13 +27,11 @@ if TYPE_CHECKING:
 type TuyaIntegerConversionFunction = Callable[
     [CustomerDevice, TuyaIntegerTypeDefinition, Any], Any
 ]
-"""Start conversion function:
 
-    Args:
-        device: The Tuya device instance (CustomerDevice).
-        dptype: The DP type definition (TuyaIntegerTypeDefinition).
-        value: The value to convert.
-"""
+
+type TuyaIntegerTypeGenerator = Callable[
+    [CustomerDevice], TuyaIntegerTypeDefinition | None
+]
 
 
 @dataclass
@@ -54,17 +52,8 @@ class TuyaClimateDefinition(BaseTuyaDefinition):
 
     switch_only_hvac_mode: TuyaClimateHVACMode
 
-    current_temperature_dp_code: TuyaDPCode | None = None
-    current_temperature_state_conversion: (
-        TuyaIntegerConversionFunction | None
-    ) = None
-    target_temperature_dp_code: TuyaDPCode | None = None
-    target_temperature_state_conversion: (
-        TuyaIntegerConversionFunction | None
-    ) = None
-    target_temperature_command_conversion: (
-        TuyaIntegerConversionFunction | None
-    ) = None
+    current_temperature_dp_type: TuyaIntegerTypeGenerator | None = None
+    target_temperature_dp_type: TuyaIntegerTypeGenerator | None = None
 
 
 @dataclass(kw_only=True)
@@ -134,25 +123,16 @@ class TuyaDeviceQuirk:
         key: str,
         # Climate specific
         switch_only_hvac_mode: TuyaClimateHVACMode,
-        current_temperature_dp_code: TuyaDPCode | None = None,
-        current_temperature_state_conversion: TuyaIntegerConversionFunction
-        | None = None,
-        target_temperature_dp_code: TuyaDPCode | None = None,
-        target_temperature_state_conversion: TuyaIntegerConversionFunction
-        | None = None,
-        target_temperature_command_conversion: TuyaIntegerConversionFunction
-        | None = None,
+        current_temperature_dp_type: TuyaIntegerTypeGenerator | None = None,
+        target_temperature_dp_type: TuyaIntegerTypeGenerator | None = None,
     ) -> Self:
         """Add climate definition."""
         self.climate_definitions.append(
             TuyaClimateDefinition(
                 key=key,
                 switch_only_hvac_mode=switch_only_hvac_mode,
-                current_temperature_dp_code=current_temperature_dp_code,
-                current_temperature_state_conversion=current_temperature_state_conversion,
-                target_temperature_dp_code=target_temperature_dp_code,
-                target_temperature_state_conversion=target_temperature_state_conversion,
-                target_temperature_command_conversion=target_temperature_command_conversion,
+                current_temperature_dp_type=current_temperature_dp_type,
+                target_temperature_dp_type=target_temperature_dp_type,
             )
         )
         return self
