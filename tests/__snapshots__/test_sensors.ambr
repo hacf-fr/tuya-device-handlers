@@ -11,7 +11,8 @@
 # ---
 # name: test_entities[cl_lfkr93x0ukp5gaia.json][time_total-state]
   dict({
-    'native_unit_of_measurement': 'ms',
+    'dp_code': <TuyaDPCode.TIME_TOTAL: 'time_total'>,
     'state': 0.0,
+    'unit': 'ms',
   })
 # ---

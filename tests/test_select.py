@@ -20,14 +20,18 @@ def _get_entity_details(
 ) -> dict[str, Any]:
     """Generate snapshot details."""
     entity_details: dict[str, Any] = {
-        "state": (status := device.status.get(definition.key)),
-        "options": [],
+        "dp_code": None,
+        "options": None,
+        "state": None,
     }
 
     if (enum_definition := definition.dp_type(device)) is not None:
+        entity_details["dp_code"] = enum_definition.dp_code
         entity_details["options"] = enum_definition.range
-        if status is not None and status not in enum_definition.range:
-            entity_details["state"] = None
+        if (
+            status := device.status.get(definition.key)
+        ) is not None and status in enum_definition.range:
+            entity_details["state"] = status
 
     return entity_details
 

@@ -5,6 +5,7 @@ from typing import Any
 
 import pytest
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import props
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaCoverDefinition
@@ -18,10 +19,39 @@ def _get_entity_details(
     definition: TuyaCoverDefinition, device: CustomerDevice
 ) -> dict[str, Any]:
     """Generate snapshot details."""
-    entity_details = {}
-    value = device.status.get(definition.key)
+    entity_details: dict[str, Any] = {
+        "get_state_dp_code": None,
+        "set_state_dp_code": None,
+        "get_position_dp_code": None,
+        "set_position_dp_code": None,
+        "state": None,
+    }
 
-    entity_details["state"] = value
+    get_state_dp_type = definition.get_state_dp_type(device)
+    set_state_dp_type = definition.set_state_dp_type(device)
+    get_position_dp_type = definition.get_position_dp_type(device)
+    set_position_dp_type = definition.set_position_dp_type(device)
+
+    if get_state_dp_type:
+        entity_details["get_state_dp_code"] = get_state_dp_type.dp_code
+        if (status := device.status.get(get_state_dp_type.dp_code)) is not None:
+            entity_details["state"] = status
+
+    if set_state_dp_type:
+        entity_details["set_state_dp_code"] = set_state_dp_type.dp_code
+
+    if get_position_dp_type:
+        entity_details["get_position_dp_code"] = get_position_dp_type.dp_code
+        if (
+            status := device.status.get(get_position_dp_type.dp_code)
+        ) is not None:
+            entity_details["position"] = get_position_dp_type.scale_value(
+                status
+            )
+
+    if set_position_dp_type:
+        entity_details["set_position_dp_code"] = set_position_dp_type.dp_code
+
     return entity_details
 
 
@@ -38,7 +68,13 @@ def test_entities(
     assert quirk is not None
     for definition in quirk.cover_definitions:
         assert dataclasses.asdict(definition) == snapshot(
-            name=f"{definition.key}-definition"
+            name=f"{definition.key}-definition",
+            exclude=props(
+                "get_state_dp_type",
+                "set_state_dp_type",
+                "get_position_dp_type",
+                "set_position_dp_type",
+            ),
         )
         assert _get_entity_details(definition, device) == snapshot(
             name=f"{definition.key}-state"

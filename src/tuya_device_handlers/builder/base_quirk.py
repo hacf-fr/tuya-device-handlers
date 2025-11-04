@@ -13,7 +13,6 @@ from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
     TuyaDeviceCategory,
-    TuyaDPCode,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
     get_dp_enum_definition,
@@ -39,6 +38,10 @@ type TuyaIntegerTypeGenerator = Callable[
 type TuyaTypeGenerator = Callable[[CustomerDevice], TuyaTypeDefinition | None]
 
 
+def _none_type_generator(device: CustomerDevice) -> None:
+    return None
+
+
 @dataclass
 class BaseTuyaDefinition:
     """Definition for a Tuya entity."""
@@ -57,8 +60,8 @@ class TuyaClimateDefinition(BaseTuyaDefinition):
 
     switch_only_hvac_mode: TuyaClimateHVACMode
 
-    current_temperature_dp_type: TuyaIntegerTypeGenerator | None = None
-    target_temperature_dp_type: TuyaIntegerTypeGenerator | None = None
+    current_temperature_dp_type: TuyaIntegerTypeGenerator
+    target_temperature_dp_type: TuyaIntegerTypeGenerator
 
 
 @dataclass(kw_only=True)
@@ -67,9 +70,10 @@ class TuyaCoverDefinition(BaseTuyaDefinition):
 
     device_class: TuyaCoverDeviceClass | None = None
 
-    current_state_dp_code: str | None = None
-    current_position_dp_code: str | None = None
-    set_position_dp_code: str | None = None
+    get_state_dp_type: TuyaEnumTypeGenerator
+    set_state_dp_type: TuyaEnumTypeGenerator
+    get_position_dp_type: TuyaIntegerTypeGenerator
+    set_position_dp_type: TuyaIntegerTypeGenerator
 
 
 @dataclass(kw_only=True)
@@ -131,8 +135,8 @@ class TuyaDeviceQuirk:
         key: str,
         # Climate specific
         switch_only_hvac_mode: TuyaClimateHVACMode,
-        current_temperature_dp_type: TuyaIntegerTypeGenerator | None = None,
-        target_temperature_dp_type: TuyaIntegerTypeGenerator | None = None,
+        current_temperature_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
+        target_temperature_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
     ) -> Self:
         """Add climate definition."""
         self.climate_definitions.append(
@@ -153,20 +157,23 @@ class TuyaDeviceQuirk:
         translation_string: str,
         device_class: TuyaCoverDeviceClass | None = None,
         # Cover specific
-        current_state_dp_code: TuyaDPCode | None = None,
-        current_position_dp_code: TuyaDPCode | None = None,
-        set_position_dp_code: TuyaDPCode | None = None,
+        get_state_dp_type: TuyaEnumTypeGenerator = _none_type_generator,
+        set_state_dp_type: TuyaEnumTypeGenerator = _none_type_generator,
+        get_position_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
+        set_position_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
     ) -> Self:
         """Add cover definition."""
+
         self.cover_definitions.append(
             TuyaCoverDefinition(
                 key=key,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 device_class=device_class,
-                current_state_dp_code=current_state_dp_code,
-                current_position_dp_code=current_position_dp_code,
-                set_position_dp_code=set_position_dp_code,
+                get_state_dp_type=get_state_dp_type,
+                set_state_dp_type=set_state_dp_type,
+                get_position_dp_type=get_position_dp_type,
+                set_position_dp_type=set_position_dp_type,
             )
         )
         return self

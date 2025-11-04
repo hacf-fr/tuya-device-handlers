@@ -9,6 +9,8 @@ from tuya_device_handlers.helpers import (
     TuyaDeviceCategory,
     TuyaDPCode,
     TuyaEntityCategory,
+    get_dp_enum_definition,
+    get_dp_integer_definition,
 )
 
 (
@@ -20,10 +22,19 @@ from tuya_device_handlers.helpers import (
         key=TuyaDPCode.CONTROL,
         translation_key="curtain",
         translation_string="[%key:component::cover::entity_component::curtain::name%]",
-        current_state_dp_code=TuyaDPCode.CONTROL,
-        current_position_dp_code=TuyaDPCode.PERCENT_CONTROL,
-        set_position_dp_code=TuyaDPCode.PERCENT_CONTROL,
         device_class=TuyaCoverDeviceClass.CURTAIN,
+        set_state_dp_type=lambda device: get_dp_enum_definition(
+            device, TuyaDPCode.CONTROL
+        ),
+        get_state_dp_type=lambda device: get_dp_enum_definition(
+            device, TuyaDPCode.CONTROL
+        ),
+        set_position_dp_type=lambda device: get_dp_integer_definition(
+            device, TuyaDPCode.PERCENT_CONTROL
+        ),
+        get_position_dp_type=lambda device: get_dp_integer_definition(
+            device, TuyaDPCode.PERCENT_CONTROL
+        ),
     )
     .add_select(
         key=TuyaDPCode.CONTROL_BACK_MODE,

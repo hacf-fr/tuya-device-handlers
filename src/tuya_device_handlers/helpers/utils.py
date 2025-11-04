@@ -62,9 +62,6 @@ def get_dp_definition(
     prefer_function: bool = False,
 ) -> TuyaDataPointDefinition | None:
     """Find a matching DPType type information for this device DPCode."""
-    if dp_code is None:
-        return None
-
     lookup_tuple = (
         (device.function, device.status_range)
         if prefer_function

@@ -9,6 +9,7 @@ from tuya_device_handlers.helpers import (
     TuyaDeviceCategory,
     TuyaDPCode,
     TuyaEntityCategory,
+    get_dp_enum_definition,
 )
 
 (
@@ -20,8 +21,13 @@ from tuya_device_handlers.helpers import (
         key=TuyaDPCode.CONTROL,
         translation_key="curtain",
         translation_string="[%key:component::cover::entity_component::curtain::name%]",
-        current_state_dp_code=TuyaDPCode.CONTROL,
         device_class=TuyaCoverDeviceClass.CURTAIN,
+        set_state_dp_type=lambda device: get_dp_enum_definition(
+            device, TuyaDPCode.CONTROL
+        ),
+        get_state_dp_type=lambda device: get_dp_enum_definition(
+            device, TuyaDPCode.CONTROL
+        ),
     )
     .add_select(
         key=TuyaDPCode.CONTROL_BACK_MODE,

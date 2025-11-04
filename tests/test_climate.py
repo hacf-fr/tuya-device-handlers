@@ -30,10 +30,8 @@ def _get_entity_details(
     }
 
     if (
-        definition.target_temperature_dp_type
-        and (int_definition := definition.target_temperature_dp_type(device))
-        is not None
-    ):
+        int_definition := definition.target_temperature_dp_type(device)
+    ) is not None:
         entity_details["target_temp_dp_code"] = int_definition.dp_code
         entity_details["target_temp_min"] = int_definition.min_scaled
         entity_details["target_temp_max"] = int_definition.max_scaled
@@ -42,10 +40,8 @@ def _get_entity_details(
             entity_details["target_temp"] = int_definition.scale_value(status)
 
     if (
-        definition.current_temperature_dp_type
-        and (int_definition := definition.current_temperature_dp_type(device))
-        is not None
-    ):
+        int_definition := definition.current_temperature_dp_type(device)
+    ) is not None:
         entity_details["current_temp_dp_code"] = int_definition.dp_code
         if (status := device.status.get(int_definition.dp_code)) is not None:
             entity_details["current_temp"] = int_definition.scale_value(status)
