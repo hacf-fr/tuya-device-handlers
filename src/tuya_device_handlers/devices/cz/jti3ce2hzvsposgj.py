@@ -17,22 +17,16 @@ from tuya_device_handlers.helpers import (
     .applies_to(category=TuyaDeviceCategory.CZ, product_id="jti3ce2hzvsposgj")
     .add_sensor(
         key=TuyaDPCode.CUR_CURRENT,
-        translation_key=None,
-        translation_string=None,
         device_class=TuyaSensorDeviceClass.CURRENT,
         state_class=TuyaSensorStateClass.MEASUREMENT,
     )
     .add_sensor(
         key=TuyaDPCode.CUR_POWER,
-        translation_key=None,
-        translation_string=None,
         device_class=TuyaSensorDeviceClass.POWER,
         state_class=TuyaSensorStateClass.MEASUREMENT,
     )
     .add_sensor(
         key=TuyaDPCode.CUR_VOLTAGE,
-        translation_key=None,
-        translation_string=None,
         device_class=TuyaSensorDeviceClass.VOLTAGE,
         state_class=TuyaSensorStateClass.MEASUREMENT,
     )
