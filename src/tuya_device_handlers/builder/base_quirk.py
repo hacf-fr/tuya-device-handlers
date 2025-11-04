@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 import inspect
 import pathlib
-from typing import TYPE_CHECKING, Any, Self
+from typing import TYPE_CHECKING, Self
 
 from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
@@ -20,17 +20,18 @@ from tuya_device_handlers.helpers import (
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
-    from tuya_device_handlers.helpers import TuyaIntegerTypeDefinition
+    from tuya_device_handlers.helpers import (
+        TuyaEnumTypeDefinition,
+        TuyaIntegerTypeDefinition,
+    )
     from tuya_device_handlers.registry import QuirksRegistry
-
-
-type TuyaIntegerConversionFunction = Callable[
-    [CustomerDevice, TuyaIntegerTypeDefinition, Any], Any
-]
 
 
 type TuyaIntegerTypeGenerator = Callable[
     [CustomerDevice], TuyaIntegerTypeDefinition | None
+]
+type TuyaEnumTypeGenerator = Callable[
+    [CustomerDevice], TuyaEnumTypeDefinition | None
 ]
 
 

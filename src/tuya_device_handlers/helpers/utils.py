@@ -95,7 +95,7 @@ def parse_dp_enum_definition(
 
     parsed = json.loads(definition.specs.values)
     return TuyaEnumTypeDefinition(
-        definition.dp_code,
+        dp_code=definition.dp_code,
         range=parsed["range"],
     )
 
@@ -115,7 +115,7 @@ def parse_dp_integer_definition(
 
     parsed = json.loads(definition.specs.values)
     return target_type(
-        definition.dp_code,
+        dp_code=definition.dp_code,
         min=parsed["min"],
         max=parsed["max"],
         scale=parsed["scale"],

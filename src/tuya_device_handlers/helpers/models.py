@@ -23,19 +23,24 @@ class TuyaDataPointDefinition:
     specs: DeviceFunction | DeviceStatusRange
 
 
-@dataclass
-class TuyaEnumTypeDefinition:
+@dataclass(kw_only=True)
+class TuyaTypeDefinition:
     """Definition of an integer type data."""
 
     dp_code: str
+
+
+@dataclass(kw_only=True)
+class TuyaEnumTypeDefinition(TuyaTypeDefinition):
+    """Definition of an integer type data."""
+
     range: list[str]
 
 
-@dataclass
-class TuyaIntegerTypeDefinition:
+@dataclass(kw_only=True)
+class TuyaIntegerTypeDefinition(TuyaTypeDefinition):
     """Definition of an integer type data."""
 
-    dp_code: str
     min: int
     max: int
     scale: int
