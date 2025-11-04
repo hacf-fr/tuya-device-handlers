@@ -6,7 +6,7 @@ import logging
 from typing import TYPE_CHECKING, Self
 
 if TYPE_CHECKING:
-    from tuya_sharing import CustomerDevice
+    from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
     from tuya_device_handlers.builder import TuyaDeviceQuirk
     from tuya_device_handlers.helpers import TuyaDeviceCategory

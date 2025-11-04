@@ -46,7 +46,7 @@ def register_tuya_quirks(custom_quirks_path: str | None = None) -> None:
 
         try:
             spec = importer.find_spec(modname)  # type: ignore[call-arg]
-            module = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+            module = importlib.util.module_from_spec(spec)  # type: ignore[attr-defined]
             sys.modules[modname] = module
             spec.loader.exec_module(module)  # type: ignore[union-attr]
         except Exception:

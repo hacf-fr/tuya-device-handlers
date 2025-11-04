@@ -18,7 +18,7 @@ from tuya_device_handlers.helpers import (
 )
 
 if TYPE_CHECKING:
-    from tuya_sharing import CustomerDevice
+    from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
     from tuya_device_handlers.helpers import TuyaIntegerTypeDefinition
     from tuya_device_handlers.registry import QuirksRegistry
