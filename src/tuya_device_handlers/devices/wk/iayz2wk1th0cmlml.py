@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from tuya_device_handlers import TUYA_QUIRKS_REGISTRY
 from tuya_device_handlers.builder import TuyaDeviceQuirk
 from tuya_device_handlers.helpers import (
@@ -9,14 +11,22 @@ from tuya_device_handlers.helpers import (
     TuyaDeviceCategory,
     TuyaDPCode,
     TuyaEntityCategory,
+    TuyaIntegerTypeDefinition,
 )
 
+if TYPE_CHECKING:
+    from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
-def _read_temperature(_device, _def, value: int) -> float:
+
+def _read_temperature(
+    _device: CustomerDevice, _def: TuyaIntegerTypeDefinition, value: int
+) -> float:
     return value / 2
 
 
-def _write_temperature(_device, _def, value: float) -> int:
+def _write_temperature(
+    _device: CustomerDevice, _def: TuyaIntegerTypeDefinition, value: float
+) -> int:
     return round(value * 2)
 
 
