@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 from syrupy.assertion import SnapshotAssertion
-from tuya_sharing import CustomerDevice
+from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaSensorDefinition
 from tuya_device_handlers.helpers import (

@@ -100,11 +100,11 @@ def parse_dp_enum_definition(
     )
 
 
-def parse_dp_integer_definition[T: TuyaIntegerTypeDefinition](
+def parse_dp_integer_definition(
     definition: TuyaDataPointDefinition,
     *,
-    target_type: type[T] = TuyaIntegerTypeDefinition,  # type: ignore[assignment]
-) -> T | None:
+    target_type: type[TuyaIntegerTypeDefinition] = TuyaIntegerTypeDefinition,
+) -> TuyaIntegerTypeDefinition | None:
     if definition.dp_type != TuyaDPType.INTEGER:
         _LOGGER.warning(
             f"Failed to parse integer definition: expected dp type INTEGER, got {definition.dp_type}"
@@ -125,13 +125,13 @@ def parse_dp_integer_definition[T: TuyaIntegerTypeDefinition](
     )
 
 
-def get_dp_integer_definition[T: TuyaIntegerTypeDefinition](
+def get_dp_integer_definition(
     device: CustomerDevice,
     dp_code: str | None,
     *,
     prefer_function: bool = False,
-    target_type: type[T] = TuyaIntegerTypeDefinition,  # type: ignore[assignment]
-) -> T | None:
+    target_type: type[TuyaIntegerTypeDefinition] = TuyaIntegerTypeDefinition,
+) -> TuyaIntegerTypeDefinition | None:
     if not (
         definition := get_dp_definition(
             device=device, dp_code=dp_code, prefer_function=prefer_function

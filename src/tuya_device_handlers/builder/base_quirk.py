@@ -188,7 +188,7 @@ class TuyaDeviceQuirk:
     def add_sensor(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
         translation_key: str,
         translation_string: str,
         device_class: TuyaSensorDeviceClass | None = None,

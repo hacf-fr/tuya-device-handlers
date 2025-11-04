@@ -5,7 +5,11 @@ import json
 from typing import Any
 from unittest.mock import MagicMock
 
-from tuya_sharing import CustomerDevice, DeviceFunction, DeviceStatusRange
+from tuya_sharing import (  # type: ignore[import-untyped]
+    CustomerDevice,
+    DeviceFunction,
+    DeviceStatusRange,
+)
 
 
 def _date_as_timestamp(date_string: str) -> int:
