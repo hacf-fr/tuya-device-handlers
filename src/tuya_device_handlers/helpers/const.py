@@ -27,6 +27,7 @@ class TuyaDPCode(StrEnum):
     CUR_POWER = "cur_power"
     CUR_VOLTAGE = "cur_voltage"
     PERCENT_CONTROL = "percent_control"
+    SWITCH = "switch"
     SWITCH_1 = "switch_1"
     TEMP_SET = "temp_set"
     TIME_TOTAL = "time_total"
