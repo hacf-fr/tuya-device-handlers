@@ -84,6 +84,8 @@ def get_dp_definition(
 
 def parse_dp_enum_definition(
     definition: TuyaDataPointDefinition,
+    *,
+    target_type: type[TuyaEnumTypeDefinition] = TuyaEnumTypeDefinition,
 ) -> TuyaEnumTypeDefinition | None:
     if definition.dp_type != TuyaDPType.ENUM:
         _LOGGER.warning(
@@ -94,7 +96,7 @@ def parse_dp_enum_definition(
         assert isinstance(definition.specs.values, str)
 
     parsed = json.loads(definition.specs.values)
-    return TuyaEnumTypeDefinition(
+    return target_type(
         dp_code=definition.dp_code,
         range=parsed["range"],
     )
@@ -123,6 +125,23 @@ def parse_dp_integer_definition(
         unit=parsed.get("unit"),
         type=parsed.get("type"),
     )
+
+
+def get_dp_enum_definition(
+    device: CustomerDevice,
+    dp_code: str | None,
+    *,
+    prefer_function: bool = False,
+    target_type: type[TuyaEnumTypeDefinition] = TuyaEnumTypeDefinition,
+) -> TuyaEnumTypeDefinition | None:
+    if not (
+        definition := get_dp_definition(
+            device=device, dp_code=dp_code, prefer_function=prefer_function
+        )
+    ):
+        return None
+
+    return parse_dp_enum_definition(definition, target_type=target_type)
 
 
 def get_dp_integer_definition(

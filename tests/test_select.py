@@ -8,11 +8,6 @@ from syrupy.assertion import SnapshotAssertion
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaSelectDefinition
-from tuya_device_handlers.helpers import (
-    TuyaDPType,
-    get_dp_definition,
-    parse_dp_enum_definition,
-)
 from tuya_device_handlers.registry import QuirksRegistry
 
 from . import create_device
@@ -28,13 +23,10 @@ def _get_entity_details(
         "options": [],
     }
 
-    if dp_definition := get_dp_definition(device, definition.key):
-        if dp_definition.dp_type == TuyaDPType.ENUM:
-            enum_definition = parse_dp_enum_definition(dp_definition)
-            assert enum_definition is not None
-            entity_details["options"] = enum_definition.range
-            if status is not None and status not in enum_definition.range:
-                entity_details["state"] = None
+    if (enum_definition := definition.dp_type(device)) is not None:
+        entity_details["options"] = enum_definition.range
+        if status is not None and status not in enum_definition.range:
+            entity_details["state"] = None
 
     return entity_details
 

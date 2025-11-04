@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+import functools
 import inspect
 import pathlib
 from typing import TYPE_CHECKING, Self
@@ -15,6 +16,7 @@ from tuya_device_handlers.helpers import (
     TuyaDPCode,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
+    get_dp_enum_definition,
 )
 
 if TYPE_CHECKING:
@@ -71,6 +73,8 @@ class TuyaCoverDefinition(BaseTuyaDefinition):
 @dataclass(kw_only=True)
 class TuyaSelectDefinition(BaseTuyaDefinition):
     """Definition for a select entity."""
+
+    dp_type: TuyaEnumTypeGenerator
 
 
 @dataclass(kw_only=True)
@@ -141,7 +145,7 @@ class TuyaDeviceQuirk:
     def add_cover(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
         translation_key: str,
         translation_string: str,
         device_class: TuyaCoverDeviceClass | None = None,
@@ -167,7 +171,8 @@ class TuyaDeviceQuirk:
     def add_select(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
+        dp_type: TuyaEnumTypeGenerator | None = None,
         translation_key: str,
         translation_string: str,
         entity_category: TuyaEntityCategory | None = None,
@@ -175,9 +180,12 @@ class TuyaDeviceQuirk:
         state_translations: dict[str, str] | None = None,
     ) -> Self:
         """Add select definition."""
+        if dp_type is None:
+            dp_type = functools.partial(get_dp_enum_definition, dp_code=key)
         self.select_definitions.append(
             TuyaSelectDefinition(
                 key=key,
+                dp_type=dp_type,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 entity_category=entity_category,
@@ -211,7 +219,7 @@ class TuyaDeviceQuirk:
     def add_switch(
         self,
         *,
-        key: TuyaDPCode,
+        key: str,
         translation_key: str,
         translation_string: str,
         entity_category: TuyaEntityCategory | None = None,
