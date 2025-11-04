@@ -163,7 +163,12 @@ def tests(session: Session) -> None:
     """Run the test suite."""
     session.install(".[cli]")
     session.install(
-        "coverage[toml]", "pytest", "pygments", "pytest-asyncio", "syrupy"
+        "coverage[toml]",
+        "pytest",
+        "pygments",
+        "pytest-asyncio",
+        "cryptography",
+        "syrupy",
     )
     try:
         session.run(
