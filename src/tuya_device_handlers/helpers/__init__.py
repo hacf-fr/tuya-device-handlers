@@ -9,11 +9,16 @@ from .homeassistant import (
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
 )
-from .models import TuyaEnumTypeDefinition, TuyaIntegerTypeDefinition
+from .models import (
+    TuyaEnumTypeDefinition,
+    TuyaIntegerTypeDefinition,
+    TuyaTypeDefinition,
+)
 from .utils import (
     get_dp_definition,
     get_dp_enum_definition,
     get_dp_integer_definition,
+    get_dp_type_definition,
     parse_dp_enum_definition,
     parse_dp_integer_definition,
     parse_enum,
@@ -29,9 +34,11 @@ __all__ = [
     "TuyaEnumTypeDefinition",
     "TuyaIntegerTypeDefinition",
     "TuyaSensorDeviceClass",
+    "TuyaTypeDefinition",
     "get_dp_definition",
     "get_dp_enum_definition",
     "get_dp_integer_definition",
+    "get_dp_type_definition",
     "parse_dp_enum_definition",
     "parse_dp_integer_definition",
     "parse_enum",

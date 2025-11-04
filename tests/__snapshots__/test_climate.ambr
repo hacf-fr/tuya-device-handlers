@@ -1,13 +1,11 @@
 # serializer version: 1
 # name: test_entities[wk_IAYz2WK1th0cMLmL.json][wk-definition]
   dict({
-    'current_temperature_dp_type': '<lambda>(device)',
     'device_class': None,
     'entity_category': None,
     'key': 'wk',
     'state_translations': None,
     'switch_only_hvac_mode': <TuyaClimateHVACMode.HEAT_COOL: 'heat_cool'>,
-    'target_temperature_dp_type': '<lambda>(device)',
     'translation_key': None,
     'translation_string': None,
   })

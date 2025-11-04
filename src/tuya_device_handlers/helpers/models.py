@@ -28,6 +28,7 @@ class TuyaTypeDefinition:
     """Definition of an integer type data."""
 
     dp_code: str
+    dp_type: TuyaDPType | None
 
 
 @dataclass(kw_only=True)

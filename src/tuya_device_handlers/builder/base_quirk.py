@@ -17,6 +17,7 @@ from tuya_device_handlers.helpers import (
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
     get_dp_enum_definition,
+    get_dp_type_definition,
 )
 
 if TYPE_CHECKING:
@@ -25,16 +26,17 @@ if TYPE_CHECKING:
     from tuya_device_handlers.helpers import (
         TuyaEnumTypeDefinition,
         TuyaIntegerTypeDefinition,
+        TuyaTypeDefinition,
     )
     from tuya_device_handlers.registry import QuirksRegistry
 
-
-type TuyaIntegerTypeGenerator = Callable[
-    [CustomerDevice], TuyaIntegerTypeDefinition | None
-]
 type TuyaEnumTypeGenerator = Callable[
     [CustomerDevice], TuyaEnumTypeDefinition | None
 ]
+type TuyaIntegerTypeGenerator = Callable[
+    [CustomerDevice], TuyaIntegerTypeDefinition | None
+]
+type TuyaTypeGenerator = Callable[[CustomerDevice], TuyaTypeDefinition | None]
 
 
 @dataclass
@@ -81,6 +83,7 @@ class TuyaSelectDefinition(BaseTuyaDefinition):
 class TuyaSensorDefinition(BaseTuyaDefinition):
     """Definition for a sensor entity."""
 
+    dp_type: TuyaTypeGenerator
     device_class: TuyaSensorDeviceClass | None = None
 
 
@@ -198,6 +201,7 @@ class TuyaDeviceQuirk:
         self,
         *,
         key: str,
+        dp_type: TuyaTypeGenerator | None = None,
         translation_key: str,
         translation_string: str,
         device_class: TuyaSensorDeviceClass | None = None,
@@ -205,9 +209,12 @@ class TuyaDeviceQuirk:
         # Sensor specific
     ) -> Self:
         """Add sensor definition."""
+        if dp_type is None:
+            dp_type = functools.partial(get_dp_type_definition, dp_code=key)
         self.sensor_definitions.append(
             TuyaSensorDefinition(
                 key=key,
+                dp_type=dp_type,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 device_class=device_class,

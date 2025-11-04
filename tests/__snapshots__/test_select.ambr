@@ -2,7 +2,6 @@
 # name: test_entities[cl_g1cp07dsqnbdbbki.json][control_back_mode-definition]
   dict({
     'device_class': None,
-    'dp_type': functools.partial(<function get_dp_enum_definition at 0x7616527589a0>, dp_code=<TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>),
     'entity_category': <TuyaEntityCategory.CONFIG: 'config'>,
     'key': <TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>,
     'state_translations': dict({
@@ -25,7 +24,6 @@
 # name: test_entities[cl_lfkr93x0ukp5gaia.json][control_back_mode-definition]
   dict({
     'device_class': None,
-    'dp_type': functools.partial(<function get_dp_enum_definition at 0x7616527589a0>, dp_code=<TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>),
     'entity_category': <TuyaEntityCategory.CONFIG: 'config'>,
     'key': <TuyaDPCode.CONTROL_BACK_MODE: 'control_back_mode'>,
     'state_translations': dict({

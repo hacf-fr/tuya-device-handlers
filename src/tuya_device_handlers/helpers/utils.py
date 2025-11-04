@@ -12,6 +12,7 @@ from .models import (
     TuyaDataPointDefinition,
     TuyaEnumTypeDefinition,
     TuyaIntegerTypeDefinition,
+    TuyaTypeDefinition,
 )
 
 if TYPE_CHECKING:
@@ -56,7 +57,7 @@ def parse_dp_type(current_type: str) -> TuyaDPType | None:
 
 def get_dp_definition(
     device: CustomerDevice,
-    dp_code: str | None,
+    dp_code: str,
     *,
     prefer_function: bool = False,
 ) -> TuyaDataPointDefinition | None:
@@ -98,6 +99,7 @@ def parse_dp_enum_definition(
     parsed = json.loads(definition.specs.values)
     return target_type(
         dp_code=definition.dp_code,
+        dp_type=definition.dp_type,
         range=parsed["range"],
     )
 
@@ -118,6 +120,7 @@ def parse_dp_integer_definition(
     parsed = json.loads(definition.specs.values)
     return target_type(
         dp_code=definition.dp_code,
+        dp_type=definition.dp_type,
         min=parsed["min"],
         max=parsed["max"],
         scale=parsed["scale"],
@@ -129,7 +132,7 @@ def parse_dp_integer_definition(
 
 def get_dp_enum_definition(
     device: CustomerDevice,
-    dp_code: str | None,
+    dp_code: str,
     *,
     prefer_function: bool = False,
     target_type: type[TuyaEnumTypeDefinition] = TuyaEnumTypeDefinition,
@@ -146,7 +149,7 @@ def get_dp_enum_definition(
 
 def get_dp_integer_definition(
     device: CustomerDevice,
-    dp_code: str | None,
+    dp_code: str,
     *,
     prefer_function: bool = False,
     target_type: type[TuyaIntegerTypeDefinition] = TuyaIntegerTypeDefinition,
@@ -159,3 +162,23 @@ def get_dp_integer_definition(
         return None
 
     return parse_dp_integer_definition(definition, target_type=target_type)
+
+
+def get_dp_type_definition(
+    device: CustomerDevice,
+    dp_code: str,
+    *,
+    prefer_function: bool = False,
+) -> TuyaTypeDefinition | None:
+    if not (
+        definition := get_dp_definition(
+            device=device, dp_code=dp_code, prefer_function=prefer_function
+        )
+    ):
+        return None
+
+    if definition.dp_type == TuyaDPType.ENUM:
+        return parse_dp_enum_definition(definition)
+    if definition.dp_type == TuyaDPType.INTEGER:
+        return parse_dp_integer_definition(definition)
+    return TuyaTypeDefinition(dp_code=dp_code, dp_type=definition.dp_type)
