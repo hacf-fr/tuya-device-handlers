@@ -14,19 +14,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { python-version: "3.12", os: ubuntu-latest, session: "pre-commit" }
-          - { python-version: "3.12", os: ubuntu-latest, session: "safety" }
+          - { python-version: "3.13", os: ubuntu-latest, session: "pre-commit" }
+          - { python-version: "3.13", os: ubuntu-latest, session: "safety" }
           - { python-version: "3.14", os: ubuntu-latest, session: "mypy" }
           - { python-version: "3.13", os: ubuntu-latest, session: "mypy" }
-          - { python-version: "3.12", os: ubuntu-latest, session: "mypy" }
           - { python-version: "3.14", os: ubuntu-latest, session: "tests" }
           - { python-version: "3.13", os: ubuntu-latest, session: "tests" }
-          - { python-version: "3.12", os: ubuntu-latest, session: "tests" }
-          - { python-version: "3.12", os: windows-latest, session: "tests" }
-          - { python-version: "3.12", os: macos-latest, session: "tests" }
-          - { python-version: "3.12", os: ubuntu-latest, session: "typeguard" }
-          - { python-version: "3.12", os: ubuntu-latest, session: "xdoctest" }
-          - { python-version: "3.12", os: ubuntu-latest, session: "docs-build" }
+          - { python-version: "3.13", os: windows-latest, session: "tests" }
+          - { python-version: "3.13", os: macos-latest, session: "tests" }
+          - { python-version: "3.13", os: ubuntu-latest, session: "typeguard" }
+          - { python-version: "3.13", os: ubuntu-latest, session: "xdoctest" }
+          - { python-version: "3.13", os: ubuntu-latest, session: "docs-build" }
 
     env:
       NOXSESSION: ${{ matrix.session }}
@@ -98,10 +96,10 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v5.0.0
 
-      - name: Set up Python 3.12
+      - name: Set up Python 3.13
         uses: actions/setup-python@v6.0.0
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Upgrade pip
         run: |
