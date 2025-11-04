@@ -478,3 +478,30 @@ class TuyaSensorDeviceClass(StrEnum):
     - Nautical: `kn`
     - Beaufort: `Beaufort`
     """
+
+
+class TuyaSensorStateClass(StrEnum):
+    """State class for sensors."""
+
+    MEASUREMENT = "measurement"
+    """The state represents a measurement in present time."""
+
+    MEASUREMENT_ANGLE = "measurement_angle"
+    """The state represents a angle measurement in present time. Currently only degrees are supported."""
+
+    TOTAL = "total"
+    """The state represents a total amount.
+
+    For example: net energy consumption"""
+
+    TOTAL_INCREASING = "total_increasing"
+    """The state represents a monotonically increasing total.
+
+    For example: an amount of consumed gas"""
+
+
+class TuyaSwitchDeviceClass(StrEnum):
+    """Device class for switches."""
+
+    OUTLET = "outlet"
+    SWITCH = "switch"

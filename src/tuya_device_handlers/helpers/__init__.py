@@ -8,6 +8,8 @@ from .homeassistant import (
     TuyaCoverDeviceClass,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
+    TuyaSensorStateClass,
+    TuyaSwitchDeviceClass,
 )
 from .models import (
     TuyaEnumTypeDefinition,
@@ -34,6 +36,8 @@ __all__ = [
     "TuyaEnumTypeDefinition",
     "TuyaIntegerTypeDefinition",
     "TuyaSensorDeviceClass",
+    "TuyaSensorStateClass",
+    "TuyaSwitchDeviceClass",
     "TuyaTypeDefinition",
     "get_dp_definition",
     "get_dp_enum_definition",

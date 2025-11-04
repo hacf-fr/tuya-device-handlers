@@ -23,7 +23,12 @@ class TuyaDPCode(StrEnum):
     CHILD_LOCK = "child_lock"
     CONTROL = "control"
     CONTROL_BACK_MODE = "control_back_mode"
+    CUR_CURRENT = "cur_current"
+    CUR_POWER = "cur_power"
+    CUR_VOLTAGE = "cur_voltage"
     PERCENT_CONTROL = "percent_control"
+    SWITCH = "switch"
+    SWITCH_1 = "switch_1"
     TEMP_SET = "temp_set"
     TIME_TOTAL = "time_total"
     UPPER_TEMP = "upper_temp"
@@ -37,6 +42,8 @@ class TuyaDeviceCategory(StrEnum):
 
     https://developer.tuya.com/en/docs/iot/categorycl?id=Kaiuz1hnpo7df
     """
+    CZ = "cz"
+    """Socket"""
     WK = "wk"
     """Thermostat
 
