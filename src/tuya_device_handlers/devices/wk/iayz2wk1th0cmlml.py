@@ -18,7 +18,7 @@ class CustomIntegerTypeDefinition(TuyaIntegerTypeDefinition):
     @property
     def step_scaled(self) -> float:
         """Return the step scaled."""
-        return self.step / (10**self.scale)
+        return self.step / (10**self.scale)  # type: ignore[no-any-return]
 
     def scale_value(self, value: int) -> float:
         return value / 2

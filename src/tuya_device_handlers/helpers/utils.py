@@ -15,7 +15,7 @@ from .models import (
 )
 
 if TYPE_CHECKING:
-    from tuya_sharing import CustomerDevice
+    from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -103,7 +103,7 @@ def parse_dp_enum_definition(
 def parse_dp_integer_definition[T: TuyaIntegerTypeDefinition](
     definition: TuyaDataPointDefinition,
     *,
-    target_type: type[T] = TuyaIntegerTypeDefinition,
+    target_type: type[T] = TuyaIntegerTypeDefinition,  # type: ignore[assignment]
 ) -> T | None:
     if definition.dp_type != TuyaDPType.INTEGER:
         _LOGGER.warning(
@@ -130,7 +130,7 @@ def get_dp_integer_definition[T: TuyaIntegerTypeDefinition](
     dp_code: str | None,
     *,
     prefer_function: bool = False,
-    target_type: type[T] = TuyaIntegerTypeDefinition,
+    target_type: type[T] = TuyaIntegerTypeDefinition,  # type: ignore[assignment]
 ) -> T | None:
     if not (
         definition := get_dp_definition(

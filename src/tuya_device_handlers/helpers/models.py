@@ -8,7 +8,10 @@ from typing import TYPE_CHECKING
 from .const import TuyaDPType
 
 if TYPE_CHECKING:
-    from tuya_sharing import DeviceFunction, DeviceStatusRange
+    from tuya_sharing import (  # type: ignore[import-untyped]
+        DeviceFunction,
+        DeviceStatusRange,
+    )
 
 
 @dataclass(kw_only=True)
@@ -57,7 +60,7 @@ class TuyaIntegerTypeDefinition:
 
     def scale_value(self, value: int) -> float:
         """Scale a value."""
-        return value / (10**self.scale)
+        return value / (10**self.scale)  # type: ignore[no-any-return]
 
     def scale_value_back(self, value: float) -> int:
         """Return raw value for scaled."""
