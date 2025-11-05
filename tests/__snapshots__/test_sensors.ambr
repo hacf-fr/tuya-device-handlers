@@ -1,0 +1,58 @@
+# serializer version: 1
+# name: test_entities[cz_4mbgrfotyNzMxDAv.json][cur_current-definition]
+  dict({
+    'device_class': <TuyaSensorDeviceClass.CURRENT: 'current'>,
+    'entity_category': None,
+    'key': <TuyaDPCode.CUR_CURRENT: 'cur_current'>,
+    'state_class': <TuyaSensorStateClass.MEASUREMENT: 'measurement'>,
+    'state_translations': None,
+    'translation_key': None,
+    'translation_placeholders': None,
+    'translation_string': None,
+  })
+# ---
+# name: test_entities[cz_4mbgrfotyNzMxDAv.json][cur_current-state]
+  dict({
+    'dp_code': <TuyaDPCode.CUR_CURRENT: 'cur_current'>,
+    'state': 273.0,
+    'unit': 'mA',
+  })
+# ---
+# name: test_entities[cz_4mbgrfotyNzMxDAv.json][cur_power-definition]
+  dict({
+    'device_class': <TuyaSensorDeviceClass.POWER: 'power'>,
+    'entity_category': None,
+    'key': <TuyaDPCode.CUR_POWER: 'cur_power'>,
+    'state_class': <TuyaSensorStateClass.MEASUREMENT: 'measurement'>,
+    'state_translations': None,
+    'translation_key': None,
+    'translation_placeholders': None,
+    'translation_string': None,
+  })
+# ---
+# name: test_entities[cz_4mbgrfotyNzMxDAv.json][cur_power-state]
+  dict({
+    'dp_code': <TuyaDPCode.CUR_POWER: 'cur_power'>,
+    'state': 243.0,
+    'unit': 'W',
+  })
+# ---
+# name: test_entities[cz_4mbgrfotyNzMxDAv.json][cur_voltage-definition]
+  dict({
+    'device_class': <TuyaSensorDeviceClass.VOLTAGE: 'voltage'>,
+    'entity_category': None,
+    'key': <TuyaDPCode.CUR_VOLTAGE: 'cur_voltage'>,
+    'state_class': <TuyaSensorStateClass.MEASUREMENT: 'measurement'>,
+    'state_translations': None,
+    'translation_key': None,
+    'translation_placeholders': None,
+    'translation_string': None,
+  })
+# ---
+# name: test_entities[cz_4mbgrfotyNzMxDAv.json][cur_voltage-state]
+  dict({
+    'dp_code': <TuyaDPCode.CUR_VOLTAGE: 'cur_voltage'>,
+    'state': 1204.0,
+    'unit': 'V',
+  })
+# ---
