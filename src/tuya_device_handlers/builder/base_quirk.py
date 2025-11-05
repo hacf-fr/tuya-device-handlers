@@ -97,6 +97,7 @@ class TuyaSensorDefinition(BaseTuyaDefinition):
     dp_type: TuyaTypeGenerator
     device_class: TuyaSensorDeviceClass | None = None
     state_class: TuyaSensorStateClass | None = None
+    suggested_unit: str | None = None
 
 
 @dataclass(kw_only=True)
@@ -224,8 +225,9 @@ class TuyaDeviceQuirk:
         device_class: TuyaSensorDeviceClass | None = None,
         entity_category: TuyaEntityCategory | None = None,
         entity_registry_enabled_default: bool = False,
-        state_class: TuyaSensorStateClass | None = None,
         # Sensor specific
+        state_class: TuyaSensorStateClass | None = None,
+        suggested_unit: str | None = None,
     ) -> Self:
         """Add sensor definition."""
         if dp_type is None:
@@ -240,6 +242,7 @@ class TuyaDeviceQuirk:
                 entity_category=entity_category,
                 entity_registry_enabled_default=entity_registry_enabled_default,
                 state_class=state_class,
+                suggested_unit=suggested_unit,
             )
         )
         return self
