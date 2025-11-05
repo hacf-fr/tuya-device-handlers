@@ -49,13 +49,16 @@ class BaseTuyaDefinition:
     """Definition for a Tuya entity."""
 
     key: str
+
+    device_class: str | None = None
+    entity_category: TuyaEntityCategory | None = None
+    entity_registry_enabled_default: bool = True
+    entity_registry_visible_default: bool = True
+    icon: str | None = None
     translation_key: str | None = None
     translation_placeholders: dict[str, str] | None = None
     translation_string: str | None = None
-    state_translations: dict[str, str] | None = None
-    device_class: str | None = None
-    entity_category: str | None = None
-    entity_registry_enabled_default: bool = False
+    translation_states: dict[str, str] | None = None
 
 
 @dataclass(kw_only=True)
@@ -194,7 +197,7 @@ class TuyaDeviceQuirk:
         translation_string: str,
         entity_category: TuyaEntityCategory | None = None,
         # Select specific
-        state_translations: dict[str, str] | None = None,
+        translation_states: dict[str, str] | None = None,
     ) -> Self:
         """Add select definition."""
         if dp_type is None:
@@ -206,7 +209,7 @@ class TuyaDeviceQuirk:
                 translation_key=translation_key,
                 translation_string=translation_string,
                 entity_category=entity_category,
-                state_translations=state_translations,
+                translation_states=translation_states,
             )
         )
         return self
