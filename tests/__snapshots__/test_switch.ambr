@@ -1,15 +1,18 @@
 # serializer version: 1
-# name: test_entities[wk_IAYz2WK1th0cMLmL.json][child_lock-definition]
+# name: test_entities[cz_jti3ce2hzvsposgj.json][switch_1-definition]
   dict({
-    'device_class': None,
-    'entity_category': <TuyaEntityCategory.CONFIG: 'config'>,
-    'key': <TuyaDPCode.CHILD_LOCK: 'child_lock'>,
+    'device_class': <TuyaSwitchDeviceClass.OUTLET: 'outlet'>,
+    'entity_category': None,
+    'key': <TuyaDPCode.SWITCH_1: 'switch_1'>,
     'state_translations': None,
-    'translation_key': 'child_lock',
-    'translation_string': 'Child lock',
+    'translation_key': 'indexed_switch',
+    'translation_placeholders': dict({
+      'index': '1',
+    }),
+    'translation_string': 'Switch {index}',
   })
 # ---
-# name: test_entities[wk_IAYz2WK1th0cMLmL.json][child_lock-state]
+# name: test_entities[cz_jti3ce2hzvsposgj.json][switch_1-state]
   dict({
     'state': True,
   })
