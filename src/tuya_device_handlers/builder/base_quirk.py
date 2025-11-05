@@ -104,6 +104,7 @@ class TuyaSensorDefinition(BaseTuyaDefinition):
 class TuyaSwitchDefinition(BaseTuyaDefinition):
     """Definition for a switch entity."""
 
+    dp_type: TuyaTypeGenerator
     device_class: TuyaSwitchDeviceClass | None = None
 
 
@@ -251,6 +252,7 @@ class TuyaDeviceQuirk:
         self,
         *,
         key: str,
+        dp_type: TuyaTypeGenerator | None = None,
         translation_key: str | None = None,
         translation_string: str | None = None,
         translation_placeholders: dict[str, str] | None = None,
@@ -259,9 +261,12 @@ class TuyaDeviceQuirk:
         # Switch specific
     ) -> Self:
         """Add switch definition."""
+        if dp_type is None:
+            dp_type = functools.partial(get_dp_type_definition, dp_code=key)
         self.switch_definitions.append(
             TuyaSwitchDefinition(
                 key=key,
+                dp_type=dp_type,
                 translation_key=translation_key,
                 translation_string=translation_string,
                 translation_placeholders=translation_placeholders,
