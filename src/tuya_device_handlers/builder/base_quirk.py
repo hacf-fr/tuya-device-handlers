@@ -7,11 +7,12 @@ from dataclasses import dataclass
 import functools
 import inspect
 import pathlib
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Any, Self
 
 from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
+    TuyaDPType,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
     TuyaSensorStateClass,
@@ -107,12 +108,27 @@ class TuyaSwitchDefinition(BaseTuyaDefinition):
     device_class: TuyaSwitchDeviceClass | None = None
 
 
+@dataclass(kw_only=True)
+class DatapointDefinition:
+    """Definition for a Tuya datapoint."""
+
+    dpid: int
+    dpcode: str
+    dptype: TuyaDPType
+    enum_range: list[str] | None = None
+    int_range: dict[str, Any] | None = None
+    label_range: list[str] | None = None
+
+
 class TuyaDeviceQuirk:
     """Quirk for Tuya device."""
 
     def __init__(self) -> None:
         """Initialize the quirk."""
         self._applies_to: list[tuple[str, str]] = []
+
+        self.datapoint_definitions: dict[int, DatapointDefinition] = {}
+
         self.climate_definitions: list[TuyaClimateDefinition] = []
         self.cover_definitions: list[TuyaCoverDefinition] = []
         self.select_definitions: list[TuyaSelectDefinition] = []
@@ -137,6 +153,51 @@ class TuyaDeviceQuirk:
         """Register the quirk in the registry."""
         for category, product_id in self._applies_to:
             registry.register(category, product_id, self)
+
+    def add_dpid_bitmap(
+        self, *, dpid: int, dpcode: str, label_range: list[str]
+    ) -> Self:
+        """Add datapoint Bitmap definition."""
+        self.datapoint_definitions[dpid] = DatapointDefinition(
+            dpid=dpid,
+            dpcode=dpcode,
+            dptype=TuyaDPType.BITMAP,
+            label_range=label_range,
+        )
+        return self
+
+    def add_dpid_boolean(self, *, dpid: int, dpcode: str) -> Self:
+        """Add datapoint Boolean definition."""
+        self.datapoint_definitions[dpid] = DatapointDefinition(
+            dpid=dpid,
+            dpcode=dpcode,
+            dptype=TuyaDPType.BOOLEAN,
+        )
+        return self
+
+    def add_dpid_enum(
+        self, *, dpid: int, dpcode: str, enum_range: list[str]
+    ) -> Self:
+        """Add datapoint Enum definition."""
+        self.datapoint_definitions[dpid] = DatapointDefinition(
+            dpid=dpid,
+            dpcode=dpcode,
+            dptype=TuyaDPType.ENUM,
+            enum_range=enum_range,
+        )
+        return self
+
+    def add_dpid_integer(
+        self, *, dpid: int, dpcode: str, int_range: dict[str, Any]
+    ) -> Self:
+        """Add datapoint Integer definition."""
+        self.datapoint_definitions[dpid] = DatapointDefinition(
+            dpid=dpid,
+            dpcode=dpcode,
+            dptype=TuyaDPType.INTEGER,
+            int_range=int_range,
+        )
+        return self
 
     def add_climate(
         self,
