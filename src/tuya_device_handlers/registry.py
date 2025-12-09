@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
     from tuya_device_handlers.builder import TuyaDeviceQuirk
-    from tuya_device_handlers.helpers import TuyaDeviceCategory
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ class QuirksRegistry:
 
     def register(
         self,
-        category: TuyaDeviceCategory,
+        category: str,
         product_id: str,
         quirk: TuyaDeviceQuirk,
     ) -> None:
