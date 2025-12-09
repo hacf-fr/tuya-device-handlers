@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from .const import TuyaDeviceCategory, TuyaDPCode, TuyaDPType
+from .const import TuyaDPType
 from .homeassistant import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
@@ -29,8 +29,6 @@ from .utils import (
 __all__ = [
     "TuyaClimateHVACMode",
     "TuyaCoverDeviceClass",
-    "TuyaDeviceCategory",
-    "TuyaDPCode",
     "TuyaDPType",
     "TuyaEntityCategory",
     "TuyaEnumTypeDefinition",

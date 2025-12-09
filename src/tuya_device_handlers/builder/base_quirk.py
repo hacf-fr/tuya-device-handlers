@@ -12,7 +12,6 @@ from typing import TYPE_CHECKING, Self
 from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
-    TuyaDeviceCategory,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
     TuyaSensorStateClass,
@@ -113,7 +112,7 @@ class TuyaDeviceQuirk:
 
     def __init__(self) -> None:
         """Initialize the quirk."""
-        self._applies_to: list[tuple[TuyaDeviceCategory, str]] = []
+        self._applies_to: list[tuple[str, str]] = []
         self.climate_definitions: list[TuyaClimateDefinition] = []
         self.cover_definitions: list[TuyaCoverDefinition] = []
         self.select_definitions: list[TuyaSelectDefinition] = []
@@ -129,9 +128,7 @@ class TuyaDeviceQuirk:
         self.quirk_file = pathlib.Path(caller.f_code.co_filename)
         self.quirk_file_line = caller.f_lineno
 
-    def applies_to(
-        self, *, category: TuyaDeviceCategory, product_id: str
-    ) -> Self:
+    def applies_to(self, *, category: str, product_id: str) -> Self:
         """Set the device type the quirk applies to."""
         self._applies_to.append((category, product_id))
         return self
