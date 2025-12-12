@@ -15,6 +15,7 @@ from tuya_device_handlers.device_wrapper import (
     DPCodeRawWrapper,
     DPCodeStringWrapper,
     DPCodeTypeInformationWrapper,
+    SetValueOutOfRangeError,
 )
 
 
@@ -59,12 +60,6 @@ def test_read_device_status(
     ("wrapper_type", "dpcode", "value", "expected"),
     [
         (
-            DPCodeBitmapWrapper,
-            "demo_bitmap",
-            2,
-            [{"code": "demo_bitmap", "value": 2}],
-        ),
-        (
             DPCodeBooleanWrapper,
             "demo_boolean",
             False,
@@ -82,34 +77,6 @@ def test_read_device_status(
             11.3,
             [{"code": "demo_integer", "value": 113}],
         ),
-        (
-            DPCodeJsonWrapper,
-            "demo_json",
-            {"h": 210, "s": 1000, "v": 1000},
-            [
-                {
-                    "code": "demo_json",
-                    "value": {"h": 210, "s": 1000, "v": 1000},
-                }
-            ],
-        ),
-        (
-            DPCodeRawWrapper,
-            "demo_raw",
-            base64.b64decode("fwceBQF/DgACAX8UAAQB"),
-            [
-                {
-                    "code": "demo_raw",
-                    "value": b"\x7f\x07\x1e\x05\x01\x7f\x0e\x00\x02\x01\x7f\x14\x00\x04\x01",
-                }
-            ],
-        ),
-        (
-            DPCodeStringWrapper,
-            "demo_string",
-            "a_string",
-            [{"code": "demo_string", "value": "a_string"}],
-        ),
     ],
 )
 def test_get_update_commands(
@@ -124,6 +91,33 @@ def test_get_update_commands(
 
     assert wrapper
     assert wrapper.get_update_commands(mock_device, value) == expected
+
+
+@pytest.mark.parametrize(
+    ("wrapper_type", "dpcode", "value", "exception_type"),
+    [
+        (DPCodeBitmapWrapper, "demo_bitmap", 3, NotImplementedError),
+        (DPCodeBooleanWrapper, "demo_boolean", "h", SetValueOutOfRangeError),
+        (DPCodeEnumWrapper, "demo_enum", "hot", SetValueOutOfRangeError),
+        (DPCodeIntegerWrapper, "demo_integer", 111.3, SetValueOutOfRangeError),
+        (DPCodeJsonWrapper, "demo_json", {}, NotImplementedError),
+        (DPCodeRawWrapper, "demo_raw", b"t", NotImplementedError),
+        (DPCodeStringWrapper, "demo_string", "hi", NotImplementedError),
+    ],
+)
+def test_get_update_commands_value_error(
+    dpcode: str,
+    wrapper_type: type[DPCodeTypeInformationWrapper],  # type: ignore [type-arg]
+    value: Any,
+    exception_type: type[Exception],
+    mock_device: CustomerDevice,
+) -> None:
+    """Test get_update_commands (ValueError)."""
+    wrapper = wrapper_type.find_dpcode(mock_device, dpcode)
+
+    assert wrapper
+    with pytest.raises(exception_type):
+        wrapper.get_update_commands(mock_device, value)
 
 
 def test_integer_details(mock_device: CustomerDevice) -> None:

@@ -43,6 +43,10 @@ def _should_log_warning(device_id: str, warning_key: str) -> bool:
     return True
 
 
+class SetValueOutOfRangeError(ValueError):
+    """Value out of range error."""
+
+
 class DeviceWrapper:
     """Base device wrapper."""
 
@@ -87,7 +91,7 @@ class DPCodeWrapper(DeviceWrapper):
         Base implementation does no validation, subclasses may override to provide
         specific validation.
         """
-        return value
+        raise NotImplementedError
 
     def get_update_commands(
         self, device: CustomerDevice, value: Any
@@ -120,12 +124,6 @@ class DPCodeTypeInformationWrapper[TypeInformationT: TypeInformation](
     def read_device_status(self, device: CustomerDevice) -> Any | None:
         """Read the device value for the dpcode."""
         return device.status.get(self.dpcode)
-
-    def _convert_value_to_raw_value(
-        self, device: CustomerDevice, value: Any
-    ) -> Any:
-        """Convert a Home Assistant value back to a raw device value."""
-        return value
 
     @classmethod
     def find_dpcode(
@@ -188,7 +186,7 @@ class DPCodeBooleanWrapper(
             return value
         # Currently only called with boolean values
         # Safety net in case of future changes
-        raise ValueError(f"Invalid boolean value `{value}`")
+        raise SetValueOutOfRangeError(f"Invalid boolean value `{value}`")
 
 
 class DPCodeEnumWrapper(DPCodeTypeInformationWrapper[EnumTypeInformation]):
@@ -225,7 +223,7 @@ class DPCodeEnumWrapper(DPCodeTypeInformationWrapper[EnumTypeInformation]):
             return value
         # Guarded by select option validation
         # Safety net in case of future changes
-        raise ValueError(
+        raise SetValueOutOfRangeError(
             f"Enum value `{value}` out of range: {self.type_information.range}"
         )
 
@@ -281,7 +279,7 @@ class DPCodeIntegerWrapper(
             return new_value
         # Guarded by number validation
         # Safety net in case of future changes
-        raise ValueError(
+        raise SetValueOutOfRangeError(
             f"Value `{new_value}` (converted from `{value}`) out of range:"
             f" ({self.type_information.min}-{self.type_information.max})"
         )
