@@ -101,7 +101,7 @@ def test_get_update_commands(
 
 
 @pytest.mark.parametrize(
-    ("wrapper_type", "dpcode", "value", "exception_type"),
+    ("wrapper_type", "dpcode", "value"),
     [
         (DPCodeBooleanWrapper, "demo_boolean", "h"),
         (DPCodeEnumWrapper, "demo_enum", "hot"),
@@ -112,7 +112,6 @@ def test_get_update_commands_value_error(
     dpcode: str,
     wrapper_type: type[DPCodeTypeInformationWrapper],  # type: ignore [type-arg]
     value: Any,
-    exception_type: type[Exception],
     mock_device: CustomerDevice,
 ) -> None:
     """Test get_update_commands (ValueError)."""
