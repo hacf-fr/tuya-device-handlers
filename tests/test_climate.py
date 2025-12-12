@@ -9,6 +9,7 @@ from syrupy.filters import props
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaClimateDefinition
+from tuya_device_handlers.device_wrapper import DPCodeIntegerWrapper
 from tuya_device_handlers.registry import QuirksRegistry
 
 from . import create_device
@@ -31,20 +32,24 @@ def _get_entity_details(
 
     if (
         int_definition := definition.target_temperature_dp_type(device)
-    ) is not None:
-        entity_details["target_temp_dp_code"] = int_definition.dp_code
-        entity_details["target_temp_min"] = int_definition.min_scaled
-        entity_details["target_temp_max"] = int_definition.max_scaled
-        entity_details["target_temp_step"] = int_definition.step_scaled
-        if (status := device.status.get(int_definition.dp_code)) is not None:
-            entity_details["target_temp"] = int_definition.scale_value(status)
+    ) is not None and isinstance(int_definition, DPCodeIntegerWrapper):
+        entity_details["target_temp_dp_code"] = int_definition.dpcode
+        entity_details["target_temp_min"] = int_definition.min
+        entity_details["target_temp_max"] = int_definition.max
+        entity_details["target_temp_step"] = int_definition.step
+        if (status := device.status.get(int_definition.dpcode)) is not None:
+            entity_details["target_temp"] = (
+                int_definition.type_information.scale_value(status)
+            )
 
     if (
         int_definition := definition.current_temperature_dp_type(device)
-    ) is not None:
-        entity_details["current_temp_dp_code"] = int_definition.dp_code
-        if (status := device.status.get(int_definition.dp_code)) is not None:
-            entity_details["current_temp"] = int_definition.scale_value(status)
+    ) is not None and isinstance(int_definition, DPCodeIntegerWrapper):
+        entity_details["current_temp_dp_code"] = int_definition.dpcode
+        if (status := device.status.get(int_definition.dpcode)) is not None:
+            entity_details["current_temp"] = (
+                int_definition.type_information.scale_value(status)
+            )
 
     return entity_details
 

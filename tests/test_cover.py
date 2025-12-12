@@ -9,6 +9,10 @@ from syrupy.filters import props
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaCoverDefinition
+from tuya_device_handlers.device_wrapper import (
+    DPCodeIntegerWrapper,
+    DPCodeWrapper,
+)
 from tuya_device_handlers.registry import QuirksRegistry
 
 from . import create_device
@@ -32,25 +36,27 @@ def _get_entity_details(
     get_position_dp_type = definition.get_position_dp_type(device)
     set_position_dp_type = definition.set_position_dp_type(device)
 
-    if get_state_dp_type:
-        entity_details["get_state_dp_code"] = get_state_dp_type.dp_code
-        if (status := device.status.get(get_state_dp_type.dp_code)) is not None:
+    if get_state_dp_type and isinstance(get_state_dp_type, DPCodeWrapper):
+        entity_details["get_state_dp_code"] = get_state_dp_type.dpcode
+        if (status := device.status.get(get_state_dp_type.dpcode)) is not None:
             entity_details["state"] = status
 
-    if set_state_dp_type:
-        entity_details["set_state_dp_code"] = set_state_dp_type.dp_code
+    if set_state_dp_type and isinstance(set_state_dp_type, DPCodeWrapper):
+        entity_details["set_state_dp_code"] = set_state_dp_type.dpcode
 
-    if get_position_dp_type:
-        entity_details["get_position_dp_code"] = get_position_dp_type.dp_code
+    if get_position_dp_type and isinstance(
+        get_position_dp_type, DPCodeIntegerWrapper
+    ):
+        entity_details["get_position_dp_code"] = get_position_dp_type.dpcode
         if (
-            status := device.status.get(get_position_dp_type.dp_code)
+            status := device.status.get(get_position_dp_type.dpcode)
         ) is not None:
-            entity_details["position"] = get_position_dp_type.scale_value(
-                status
+            entity_details["position"] = (
+                get_position_dp_type.type_information.scale_value(status)
             )
 
-    if set_position_dp_type:
-        entity_details["set_position_dp_code"] = set_position_dp_type.dp_code
+    if set_position_dp_type and isinstance(set_position_dp_type, DPCodeWrapper):
+        entity_details["set_position_dp_code"] = set_position_dp_type.dpcode
 
     return entity_details
 
