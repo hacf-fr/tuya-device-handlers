@@ -4,40 +4,28 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-import functools
 import inspect
 import pathlib
 from typing import TYPE_CHECKING, Any, Self
 
+from tuya_device_handlers.const import DPType
+from tuya_device_handlers.device_wrapper import DeviceWrapper
 from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
-    TuyaDPType,
     TuyaEntityCategory,
     TuyaSensorDeviceClass,
     TuyaSensorStateClass,
     TuyaSwitchDeviceClass,
-    get_dp_enum_definition,
-    get_dp_type_definition,
 )
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
-    from tuya_device_handlers.helpers import (
-        TuyaEnumTypeDefinition,
-        TuyaIntegerTypeDefinition,
-        TuyaTypeDefinition,
-    )
     from tuya_device_handlers.registry import QuirksRegistry
 
-type TuyaEnumTypeGenerator = Callable[
-    [CustomerDevice], TuyaEnumTypeDefinition | None
-]
-type TuyaIntegerTypeGenerator = Callable[
-    [CustomerDevice], TuyaIntegerTypeDefinition | None
-]
-type TuyaTypeGenerator = Callable[[CustomerDevice], TuyaTypeDefinition | None]
+
+type DeviceWrapperGenerator = Callable[[CustomerDevice], DeviceWrapper | None]
 
 
 def _none_type_generator(device: CustomerDevice) -> None:
@@ -67,8 +55,8 @@ class TuyaClimateDefinition(BaseTuyaDefinition):
 
     switch_only_hvac_mode: TuyaClimateHVACMode
 
-    current_temperature_dp_type: TuyaIntegerTypeGenerator
-    target_temperature_dp_type: TuyaIntegerTypeGenerator
+    current_temperature_dp_type: DeviceWrapperGenerator
+    target_temperature_dp_type: DeviceWrapperGenerator
 
 
 @dataclass(kw_only=True)
@@ -77,24 +65,24 @@ class TuyaCoverDefinition(BaseTuyaDefinition):
 
     device_class: TuyaCoverDeviceClass | None = None
 
-    get_state_dp_type: TuyaEnumTypeGenerator
-    set_state_dp_type: TuyaEnumTypeGenerator
-    get_position_dp_type: TuyaIntegerTypeGenerator
-    set_position_dp_type: TuyaIntegerTypeGenerator
+    get_state_dp_type: DeviceWrapperGenerator
+    set_state_dp_type: DeviceWrapperGenerator
+    get_position_dp_type: DeviceWrapperGenerator
+    set_position_dp_type: DeviceWrapperGenerator
 
 
 @dataclass(kw_only=True)
 class TuyaSelectDefinition(BaseTuyaDefinition):
     """Definition for a select entity."""
 
-    dp_type: TuyaEnumTypeGenerator
+    dp_type: DeviceWrapperGenerator
 
 
 @dataclass(kw_only=True)
 class TuyaSensorDefinition(BaseTuyaDefinition):
     """Definition for a sensor entity."""
 
-    dp_type: TuyaTypeGenerator
+    dp_type: DeviceWrapperGenerator
     device_class: TuyaSensorDeviceClass | None = None
     state_class: TuyaSensorStateClass | None = None
     suggested_unit: str | None = None
@@ -104,7 +92,7 @@ class TuyaSensorDefinition(BaseTuyaDefinition):
 class TuyaSwitchDefinition(BaseTuyaDefinition):
     """Definition for a switch entity."""
 
-    dp_type: TuyaTypeGenerator
+    dp_type: DeviceWrapperGenerator
     device_class: TuyaSwitchDeviceClass | None = None
 
 
@@ -114,7 +102,7 @@ class DatapointDefinition:
 
     dpid: int
     dpcode: str
-    dptype: TuyaDPType
+    dptype: DPType
     enum_range: list[str] | None = None
     int_range: dict[str, Any] | None = None
     label_range: list[str] | None = None
@@ -161,7 +149,7 @@ class TuyaDeviceQuirk:
         self.datapoint_definitions[dpid] = DatapointDefinition(
             dpid=dpid,
             dpcode=dpcode,
-            dptype=TuyaDPType.BITMAP,
+            dptype=DPType.BITMAP,
             label_range=label_range,
         )
         return self
@@ -171,7 +159,7 @@ class TuyaDeviceQuirk:
         self.datapoint_definitions[dpid] = DatapointDefinition(
             dpid=dpid,
             dpcode=dpcode,
-            dptype=TuyaDPType.BOOLEAN,
+            dptype=DPType.BOOLEAN,
         )
         return self
 
@@ -182,7 +170,7 @@ class TuyaDeviceQuirk:
         self.datapoint_definitions[dpid] = DatapointDefinition(
             dpid=dpid,
             dpcode=dpcode,
-            dptype=TuyaDPType.ENUM,
+            dptype=DPType.ENUM,
             enum_range=enum_range,
         )
         return self
@@ -194,7 +182,7 @@ class TuyaDeviceQuirk:
         self.datapoint_definitions[dpid] = DatapointDefinition(
             dpid=dpid,
             dpcode=dpcode,
-            dptype=TuyaDPType.INTEGER,
+            dptype=DPType.INTEGER,
             int_range=int_range,
         )
         return self
@@ -205,8 +193,8 @@ class TuyaDeviceQuirk:
         key: str,
         # Climate specific
         switch_only_hvac_mode: TuyaClimateHVACMode,
-        current_temperature_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
-        target_temperature_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
+        current_temperature_dp_type: DeviceWrapperGenerator = _none_type_generator,
+        target_temperature_dp_type: DeviceWrapperGenerator = _none_type_generator,
     ) -> Self:
         """Add climate definition."""
         self.climate_definitions.append(
@@ -227,10 +215,10 @@ class TuyaDeviceQuirk:
         translation_string: str,
         device_class: TuyaCoverDeviceClass | None = None,
         # Cover specific
-        get_state_dp_type: TuyaEnumTypeGenerator = _none_type_generator,
-        set_state_dp_type: TuyaEnumTypeGenerator = _none_type_generator,
-        get_position_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
-        set_position_dp_type: TuyaIntegerTypeGenerator = _none_type_generator,
+        get_state_dp_type: DeviceWrapperGenerator = _none_type_generator,
+        set_state_dp_type: DeviceWrapperGenerator = _none_type_generator,
+        get_position_dp_type: DeviceWrapperGenerator = _none_type_generator,
+        set_position_dp_type: DeviceWrapperGenerator = _none_type_generator,
     ) -> Self:
         """Add cover definition."""
 
@@ -252,7 +240,7 @@ class TuyaDeviceQuirk:
         self,
         *,
         key: str,
-        dp_type: TuyaEnumTypeGenerator | None = None,
+        dp_type: DeviceWrapperGenerator | None = None,
         translation_key: str,
         translation_string: str,
         entity_category: TuyaEntityCategory | None = None,
@@ -261,7 +249,7 @@ class TuyaDeviceQuirk:
     ) -> Self:
         """Add select definition."""
         if dp_type is None:
-            dp_type = functools.partial(get_dp_enum_definition, dp_code=key)
+            raise NotImplementedError
         self.select_definitions.append(
             TuyaSelectDefinition(
                 key=key,
@@ -278,7 +266,7 @@ class TuyaDeviceQuirk:
         self,
         *,
         key: str,
-        dp_type: TuyaTypeGenerator | None = None,
+        dp_type: DeviceWrapperGenerator | None = None,
         translation_key: str | None = None,
         translation_string: str | None = None,
         device_class: TuyaSensorDeviceClass | None = None,
@@ -290,7 +278,7 @@ class TuyaDeviceQuirk:
     ) -> Self:
         """Add sensor definition."""
         if dp_type is None:
-            dp_type = functools.partial(get_dp_type_definition, dp_code=key)
+            raise NotImplementedError
         self.sensor_definitions.append(
             TuyaSensorDefinition(
                 key=key,
@@ -310,7 +298,7 @@ class TuyaDeviceQuirk:
         self,
         *,
         key: str,
-        dp_type: TuyaTypeGenerator | None = None,
+        dp_type: DeviceWrapperGenerator | None = None,
         translation_key: str | None = None,
         translation_string: str | None = None,
         translation_placeholders: dict[str, str] | None = None,
@@ -320,7 +308,7 @@ class TuyaDeviceQuirk:
     ) -> Self:
         """Add switch definition."""
         if dp_type is None:
-            dp_type = functools.partial(get_dp_type_definition, dp_code=key)
+            raise NotImplementedError
         self.switch_definitions.append(
             TuyaSwitchDefinition(
                 key=key,
