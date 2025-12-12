@@ -1,0 +1,102 @@
+# serializer version: 1
+# name: test_electricity_data[AAAAAAAAAAAAAA==]
+  dict({
+    'current': 0,
+    'power': 0,
+    'voltage': 0.0,
+  })
+# ---
+# name: test_electricity_data[AQ8IgAAD6AAnEAANrAAw1FA=]
+  dict({
+    'current': 1000,
+    'power': 10000,
+    'voltage': 217.6,
+  })
+# ---
+# name: test_electricity_data[Ag8IgAAD6AAnEAANrAAw1FAP]
+  dict({
+    'current': -1000,
+    'power': -10000,
+    'voltage': 217.6,
+  })
+# ---
+# name: test_electricity_data[Ag8JJQAASAAACAAAAAAACGME]
+  dict({
+    'current': 72,
+    'power': 8,
+    'voltage': 234.1,
+  })
+# ---
+# name: test_electricity_data[CGYAPCgADPIACw==]
+  dict({
+    'current': 15400,
+    'power': 3314,
+    'voltage': 215.0,
+  })
+# ---
+# name: test_electricity_data[CIAAA+gAJxA=]
+  dict({
+    'current': 1000,
+    'power': 10000,
+    'voltage': 217.6,
+  })
+# ---
+# name: test_electricity_data[CIsAK8MACWo=]
+  dict({
+    'current': 11203,
+    'power': 2410,
+    'voltage': 218.7,
+  })
+# ---
+# name: test_electricity_data[CJwAA5EAAFw=]
+  dict({
+    'current': 913,
+    'power': 92,
+    'voltage': 220.4,
+  })
+# ---
+# name: test_electricity_data[CKMAAn0AAGw=]
+  dict({
+    'current': 637,
+    'power': 108,
+    'voltage': 221.1,
+  })
+# ---
+# name: test_electricity_data[CPQAI58ACBA=]
+  dict({
+    'current': 9119,
+    'power': 2064,
+    'voltage': 229.2,
+  })
+# ---
+# name: test_electricity_data[CREANUkADG8=]
+  dict({
+    'current': 13641,
+    'power': 3183,
+    'voltage': 232.1,
+  })
+# ---
+# name: test_electricity_data[CSIAFfQABKE=]
+  dict({
+    'current': 5620,
+    'power': 1185,
+    'voltage': 233.8,
+  })
+# ---
+# name: test_electricity_data[CT0AAmAAAIU=]
+  dict({
+    'current': 608,
+    'power': 133,
+    'voltage': 236.5,
+  })
+# ---
+# name: test_electricity_data[CTIAVfcAFGw=]
+  dict({
+    'current': 22007,
+    'power': 5228,
+    'voltage': 235.4,
+  })
+# ---
+# name: test_electricity_data[]
+  None
+# ---
