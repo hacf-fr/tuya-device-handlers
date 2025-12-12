@@ -17,5 +17,5 @@ def test_dptype_parser(
     current_type: str,
     expected_type: DPType | None,
 ) -> None:
-    """Test find_dpcode with invalid dpcode."""
+    """Test DPType.try_parse."""
     assert DPType.try_parse(current_type) is expected_type
