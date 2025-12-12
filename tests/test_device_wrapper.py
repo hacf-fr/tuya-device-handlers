@@ -5,7 +5,6 @@ from typing import Any
 
 import pytest
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
-from typeguard import suppress_type_checks
 
 from tuya_device_handlers.device_wrapper import (
     DPCodeBitmapWrapper,
@@ -18,6 +17,13 @@ from tuya_device_handlers.device_wrapper import (
     DPCodeTypeInformationWrapper,
     SetValueOutOfRangeError,
 )
+
+try:
+    from typeguard import suppress_type_checks  # type: ignore[import-not-found]
+except ImportError:
+    from contextlib import nullcontext
+
+    suppress_type_checks = nullcontext
 
 
 @pytest.mark.parametrize(
