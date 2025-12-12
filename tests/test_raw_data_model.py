@@ -23,6 +23,10 @@ from tuya_device_handlers.raw_data_model import ElectricityData
         "CSIAFfQABKE=",
         "CT0AAmAAAIU=",
         "CTIAVfcAFGw=",
+        # Mock
+        base64.b64encode(bytes.fromhex("08800003E8002710")),
+        base64.b64encode(bytes.fromhex("010F08800003E8002710000DAC0030D450")),
+        base64.b64encode(bytes.fromhex("020F08800003E8002710000DAC0030D4500F")),
     ],
 )
 def test_electricity_data(

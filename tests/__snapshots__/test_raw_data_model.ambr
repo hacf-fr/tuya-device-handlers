@@ -6,6 +6,20 @@
     'voltage': 0.0,
   })
 # ---
+# name: test_electricity_data[AQ8IgAAD6AAnEAANrAAw1FA=]
+  dict({
+    'current': 1000,
+    'power': 10000,
+    'voltage': 217.6,
+  })
+# ---
+# name: test_electricity_data[Ag8IgAAD6AAnEAANrAAw1FAP]
+  dict({
+    'current': -1000,
+    'power': -10000,
+    'voltage': 217.6,
+  })
+# ---
 # name: test_electricity_data[Ag8JJQAASAAACAAAAAAACGME]
   dict({
     'current': 72,
@@ -18,6 +32,13 @@
     'current': 15400,
     'power': 3314,
     'voltage': 215.0,
+  })
+# ---
+# name: test_electricity_data[CIAAA+gAJxA=]
+  dict({
+    'current': 1000,
+    'power': 10000,
+    'voltage': 217.6,
   })
 # ---
 # name: test_electricity_data[CIsAK8MACWo=]
