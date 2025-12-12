@@ -44,7 +44,7 @@ def _should_log_warning(device_id: str, warning_key: str) -> bool:
 
 
 class SetValueOutOfRangeError(ValueError):
-    """Value out of range error."""
+    """Attempted to send an invalid value to Tuya data point."""
 
 
 class DeviceWrapper:
