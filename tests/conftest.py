@@ -25,10 +25,13 @@ def filled_quirks_registry() -> QuirksRegistry:
 def device_fixture() -> CustomerDevice:
     """Fixture for a customer device."""
     mock_device = Mock(spec=CustomerDevice)
+    mock_device.id = "device_id"
+    mock_device.product_id = "product_id"
+
     mock_device.status = {
-        "demo_bitmap": 0,
+        "demo_bitmap": 3,
         "demo_boolean": True,
-        "demo_enum": "hot",
+        "demo_enum": "customize_scene",
         "demo_integer": 123,
         "demo_json": '{"h": 210,"s": 1000,"v": 1000}',
         "demo_raw": "fwceBQF/DgACAX8UAAQB",
@@ -63,7 +66,7 @@ def device_fixture() -> CustomerDevice:
         "demo_integer": DeviceFunction(
             code="demo_integer",
             type="Integer",
-            values='{"unit": "","min": 0,"max": 1000,"scale": 1,"step": 1}',
+            values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
         ),
         "demo_integer_missing_values": DeviceFunction(
             code="demo_integer_missing_values",
@@ -105,7 +108,7 @@ def device_fixture() -> CustomerDevice:
         "demo_integer": DeviceFunction(
             code="demo_integer",
             type="Integer",
-            values='{"unit": "","min": 0,"max": 1000,"scale": 1,"step": 1}',
+            values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
         ),
         "demo_json": DeviceFunction(
             code="demo_json",
