@@ -28,6 +28,15 @@ except ImportError:
     suppress_type_checks = nullcontext
 
 
+def test_dpcode_not_found(
+    mock_device: CustomerDevice,
+) -> None:
+    """Test find_dpcode with invalid dpcode."""
+    type_information = DPCodeIntegerWrapper.find_dpcode(mock_device, "invalid")
+
+    assert type_information is None
+
+
 @pytest.mark.parametrize(
     ("wrapper_type", "dpcode", "expected_device_status"),
     [
