@@ -63,7 +63,7 @@ tests = ["tests", "*/tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["tuya_device_handlers", "tests"]
+source = ["tuya_device_handlers"]
 
 [tool.coverage.report]
 show_missing = true
