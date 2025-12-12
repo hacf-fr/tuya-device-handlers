@@ -46,6 +46,14 @@ def test_read_device_status(
     assert wrapper
     assert wrapper.read_device_status(mock_device) == expected_device_status
 
+    # All wrappers return None if status is None
+    mock_device.status[dpcode] = None
+    assert wrapper.read_device_status(mock_device) is None
+
+    # All wrappers return None if status is missing
+    mock_device.status.pop(dpcode)
+    assert wrapper.read_device_status(mock_device) is None
+
 
 def test_integer_details(mock_device: CustomerDevice) -> None:
     """Test scale_value/scale_value_back."""
