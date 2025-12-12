@@ -42,6 +42,11 @@ def device_fixture() -> CustomerDevice:
             type="Bitmap",
             values='{"label": ["motor_fault"]}',
         ),
+        "demo_bitmap_missing_values": DeviceFunction(
+            code="demo_bitmap_missing_values",
+            type="Bitmap",
+            values="{}",
+        ),
         "demo_boolean": DeviceFunction(
             code="demo_boolean",
             type="Boolean",
@@ -52,10 +57,20 @@ def device_fixture() -> CustomerDevice:
             type="Enum",
             values='{"range": ["scene", "customize_scene", "colour"]}',
         ),
+        "demo_enum_missing_values": DeviceFunction(
+            code="demo_enum_missing_values",
+            type="Enum",
+            values="{}",
+        ),
         "demo_integer": DeviceFunction(
             code="demo_integer",
             type="Integer",
-            values='{"unit": "","min": 0,"max": 100,"scale": 0,"step": 1}',
+            values='{"unit": "","min": 0,"max": 1000,"scale": 1,"step": 1}',
+        ),
+        "demo_integer_missing_values": DeviceFunction(
+            code="demo_integer_missing_values",
+            type="Integer",
+            values="{}",
         ),
         "demo_json": DeviceFunction(
             code="demo_json",
@@ -92,7 +107,7 @@ def device_fixture() -> CustomerDevice:
         "demo_integer": DeviceFunction(
             code="demo_integer",
             type="Integer",
-            values='{"unit": "","min": 0,"max": 100,"scale": 0,"step": 1}',
+            values='{"unit": "","min": 0,"max": 1000,"scale": 1,"step": 1}',
         ),
         "demo_json": DeviceFunction(
             code="demo_json",
@@ -117,23 +132,30 @@ def device_fixture() -> CustomerDevice:
     ("type_information_type", "dpcode"),
     [
         (BitmapTypeInformation, "demo_bitmap"),
-        (BitmapTypeInformation, "invalid"),
         (BooleanTypeInformation, "demo_boolean"),
-        (BooleanTypeInformation, "invalid"),
         (EnumTypeInformation, "demo_enum"),
-        (EnumTypeInformation, "invalid"),
         (IntegerTypeInformation, "demo_integer"),
-        (IntegerTypeInformation, "invalid"),
         (JsonTypeInformation, "demo_json"),
-        (JsonTypeInformation, "invalid"),
         (RawTypeInformation, "demo_raw"),
-        (RawTypeInformation, "invalid"),
         (StringTypeInformation, "demo_string"),
+        # Invalid (missing type details)
+        (BitmapTypeInformation, "demo_bitmap_missing_values"),
+        (EnumTypeInformation, "demo_enum_missing_values"),
+        (IntegerTypeInformation, "demo_integer_missing_values"),
+        # Invalid => return None
+        (BitmapTypeInformation, "invalid"),
+        (BooleanTypeInformation, "invalid"),
+        (EnumTypeInformation, "invalid"),
+        (IntegerTypeInformation, "invalid"),
+        (JsonTypeInformation, "invalid"),
+        (RawTypeInformation, "invalid"),
         (StringTypeInformation, "invalid"),
+        (StringTypeInformation, ("some",)),
+        (StringTypeInformation, None),
     ],
 )
 def test_valid_type_information(
-    dpcode: str,
+    dpcode: str | tuple[str] | None,
     type_information_type: type[TypeInformation],
     snapshot: SnapshotAssertion,
     mock_device: CustomerDevice,
@@ -147,3 +169,15 @@ def test_valid_type_information(
         else dataclasses.asdict(type_information)
     )
     assert asdict == snapshot(name="type_information")
+
+
+def test_integer_scaling(mock_device: CustomerDevice) -> None:
+    """Test scale_value/scale_value_back."""
+    type_information = IntegerTypeInformation.find_dpcode(
+        mock_device, "demo_integer"
+    )
+
+    assert type_information
+    assert type_information.scale == 1
+    assert type_information.scale_value(150) == 15
+    assert type_information.scale_value_back(15) == 150
