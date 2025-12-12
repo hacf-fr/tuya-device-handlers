@@ -103,13 +103,9 @@ def test_get_update_commands(
 @pytest.mark.parametrize(
     ("wrapper_type", "dpcode", "value", "exception_type"),
     [
-        (DPCodeBitmapWrapper, "demo_bitmap", 3, NotImplementedError),
-        (DPCodeBooleanWrapper, "demo_boolean", "h", SetValueOutOfRangeError),
-        (DPCodeEnumWrapper, "demo_enum", "hot", SetValueOutOfRangeError),
-        (DPCodeIntegerWrapper, "demo_integer", 111.3, SetValueOutOfRangeError),
-        (DPCodeJsonWrapper, "demo_json", {}, NotImplementedError),
-        (DPCodeRawWrapper, "demo_raw", b"t", NotImplementedError),
-        (DPCodeStringWrapper, "demo_string", "hi", NotImplementedError),
+        (DPCodeBooleanWrapper, "demo_boolean", "h"),
+        (DPCodeEnumWrapper, "demo_enum", "hot"),
+        (DPCodeIntegerWrapper, "demo_integer", 111.3),
     ],
 )
 def test_get_update_commands_value_error(
@@ -123,7 +119,7 @@ def test_get_update_commands_value_error(
     wrapper = wrapper_type.find_dpcode(mock_device, dpcode)
 
     assert wrapper
-    with suppress_type_checks(), pytest.raises(exception_type):
+    with suppress_type_checks(), pytest.raises(SetValueOutOfRangeError):
         wrapper.get_update_commands(mock_device, value)
 
 

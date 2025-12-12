@@ -121,10 +121,6 @@ class DPCodeTypeInformationWrapper[TypeInformationT: TypeInformation](
         super().__init__(dpcode)
         self.type_information = type_information
 
-    def read_device_status(self, device: CustomerDevice) -> Any | None:
-        """Read the device value for the dpcode."""
-        return device.status.get(self.dpcode)
-
     @classmethod
     def find_dpcode(
         cls,
