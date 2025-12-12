@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_valid_type_information[BitmapTypeInformation-demo_bitmap][type_information]
+# name: test_valid_type_information[BitmapTypeInformation-demo_bitmap]
   dict({
     'dpcode': 'demo_bitmap',
     'label': list([
@@ -8,22 +8,13 @@
     'type_data': '{"label": ["motor_fault"]}',
   })
 # ---
-# name: test_valid_type_information[BitmapTypeInformation-demo_bitmap_missing_values][type_information]
-  None
-# ---
-# name: test_valid_type_information[BitmapTypeInformation-invalid][type_information]
-  None
-# ---
-# name: test_valid_type_information[BooleanTypeInformation-demo_boolean][type_information]
+# name: test_valid_type_information[BooleanTypeInformation-demo_boolean]
   dict({
     'dpcode': 'demo_boolean',
     'type_data': '{}',
   })
 # ---
-# name: test_valid_type_information[BooleanTypeInformation-invalid][type_information]
-  None
-# ---
-# name: test_valid_type_information[EnumTypeInformation-demo_enum][type_information]
+# name: test_valid_type_information[EnumTypeInformation-demo_enum]
   dict({
     'dpcode': 'demo_enum',
     'range': list([
@@ -34,59 +25,32 @@
     'type_data': '{"range": ["scene", "customize_scene", "colour"]}',
   })
 # ---
-# name: test_valid_type_information[EnumTypeInformation-demo_enum_missing_values][type_information]
-  None
-# ---
-# name: test_valid_type_information[EnumTypeInformation-invalid][type_information]
-  None
-# ---
-# name: test_valid_type_information[IntegerTypeInformation-demo_integer][type_information]
+# name: test_valid_type_information[IntegerTypeInformation-demo_integer]
   dict({
     'dpcode': 'demo_integer',
     'max': 1000,
     'min': 0,
     'scale': 1,
     'step': 1,
-    'type_data': '{"unit": "","min": 0,"max": 1000,"scale": 1,"step": 1}',
-    'unit': '',
+    'type_data': '{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
+    'unit': '%',
   })
 # ---
-# name: test_valid_type_information[IntegerTypeInformation-demo_integer_missing_values][type_information]
-  None
-# ---
-# name: test_valid_type_information[IntegerTypeInformation-invalid][type_information]
-  None
-# ---
-# name: test_valid_type_information[JsonTypeInformation-demo_json][type_information]
+# name: test_valid_type_information[JsonTypeInformation-demo_json]
   dict({
     'dpcode': 'demo_json',
     'type_data': '{}',
   })
 # ---
-# name: test_valid_type_information[JsonTypeInformation-invalid][type_information]
-  None
-# ---
-# name: test_valid_type_information[RawTypeInformation-demo_raw][type_information]
+# name: test_valid_type_information[RawTypeInformation-demo_raw]
   dict({
     'dpcode': 'demo_raw',
     'type_data': '{}',
   })
 # ---
-# name: test_valid_type_information[RawTypeInformation-invalid][type_information]
-  None
-# ---
-# name: test_valid_type_information[StringTypeInformation-None][type_information]
-  None
-# ---
-# name: test_valid_type_information[StringTypeInformation-demo_string][type_information]
+# name: test_valid_type_information[StringTypeInformation-demo_string]
   dict({
     'dpcode': 'demo_string',
     'type_data': '{}',
   })
-# ---
-# name: test_valid_type_information[StringTypeInformation-dpcode17][type_information]
-  None
-# ---
-# name: test_valid_type_information[StringTypeInformation-invalid][type_information]
-  None
 # ---
