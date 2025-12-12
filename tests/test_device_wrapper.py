@@ -36,7 +36,7 @@ from tuya_device_handlers.device_wrapper import (
 )
 def test_read_device_status(
     dpcode: str,
-    wrapper_type: type[DPCodeTypeInformationWrapper],
+    wrapper_type: type[DPCodeTypeInformationWrapper],  # type: ignore [type-arg]
     expected_device_status: Any,
     mock_device: CustomerDevice,
 ) -> None:
@@ -47,7 +47,7 @@ def test_read_device_status(
     assert wrapper.read_device_status(mock_device) == expected_device_status
 
 
-def test_integer_scaling(mock_device: CustomerDevice) -> None:
+def test_integer_details(mock_device: CustomerDevice) -> None:
     """Test scale_value/scale_value_back."""
     wrapper = DPCodeIntegerWrapper.find_dpcode(mock_device, "demo_integer")
 
