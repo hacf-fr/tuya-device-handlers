@@ -9,10 +9,10 @@ from syrupy.filters import props
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaSensorDefinition
-from tuya_device_handlers.helpers import (
-    TuyaDPType,
-    TuyaEnumTypeDefinition,
-    TuyaIntegerTypeDefinition,
+from tuya_device_handlers.device_wrapper import (
+    DPCodeEnumWrapper,
+    DPCodeIntegerWrapper,
+    DPCodeWrapper,
 )
 from tuya_device_handlers.registry import QuirksRegistry
 
@@ -30,19 +30,22 @@ def _get_entity_details(
         "unit": None,
     }
 
-    if dp_definition := definition.dp_type(device):
-        entity_details["dp_code"] = dp_definition.dp_code
+    if (dp_definition := definition.dp_type(device)) and isinstance(
+        dp_definition, DPCodeWrapper
+    ):
+        entity_details["dp_code"] = dp_definition.dpcode
         status = device.status.get(definition.key)
 
-        if dp_definition.dp_type == TuyaDPType.ENUM:
-            assert isinstance(dp_definition, TuyaEnumTypeDefinition)
-            if status is not None and status not in dp_definition.range:
+        if isinstance(dp_definition, DPCodeEnumWrapper):
+            if (
+                status is not None
+                and status not in dp_definition.type_information.range
+            ):
                 status = None
-        elif dp_definition.dp_type == TuyaDPType.INTEGER:
-            assert isinstance(dp_definition, TuyaIntegerTypeDefinition)
-            entity_details["unit"] = dp_definition.unit
+        elif isinstance(dp_definition, DPCodeIntegerWrapper):
+            entity_details["unit"] = dp_definition.type_information.unit
             if status is not None:
-                status = dp_definition.scale_value(status)
+                status = dp_definition.type_information.scale_value(status)
 
         entity_details["state"] = status
 
