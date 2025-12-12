@@ -1,4 +1,4 @@
-"""Test utils"""
+"""Test TypeInformation classes"""
 
 import dataclasses
 
