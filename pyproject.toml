@@ -71,6 +71,8 @@ fail_under = 100
 exclude_lines = [
   # Don't complain if tests don't hit defensive assertion code:
   "raise NotImplementedError",
+  # TYPE_CHECKING blocks are never executed during pytest run
+  "if TYPE_CHECKING:",
 ]
 
 [tool.mypy]
