@@ -5,6 +5,7 @@ from typing import Any
 
 import pytest
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
+from typeguard import suppress_type_checks
 
 from tuya_device_handlers.device_wrapper import (
     DPCodeBitmapWrapper,
@@ -116,7 +117,7 @@ def test_get_update_commands_value_error(
     wrapper = wrapper_type.find_dpcode(mock_device, dpcode)
 
     assert wrapper
-    with pytest.raises(exception_type):
+    with suppress_type_checks(), pytest.raises(exception_type):
         wrapper.get_update_commands(mock_device, value)
 
 
