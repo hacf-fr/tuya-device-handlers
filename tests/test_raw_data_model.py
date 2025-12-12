@@ -27,6 +27,8 @@ from tuya_device_handlers.raw_data_model import ElectricityData
         base64.b64encode(bytes.fromhex("08800003E8002710")),
         base64.b64encode(bytes.fromhex("010F08800003E8002710000DAC0030D450")),
         base64.b64encode(bytes.fromhex("020F08800003E8002710000DAC0030D4500F")),
+        # Invalid
+        "",
     ],
 )
 def test_electricity_data(
@@ -37,5 +39,5 @@ def test_electricity_data(
     raw_bytes = base64.b64decode(base64_string)
     raw_data = ElectricityData.from_bytes(raw_bytes)
 
-    assert raw_data is not None
-    assert dataclasses.asdict(raw_data) == snapshot
+    asdict = None if raw_data is None else dataclasses.asdict(raw_data)
+    assert asdict == snapshot
