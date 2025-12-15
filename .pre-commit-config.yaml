@@ -29,7 +29,7 @@ repos:
         stages: [pre-commit, pre-push, manual]
       - id: ruff-check
         name: Lint code with Ruff
-        entry: ruff check
+        entry: ruff check --fix
         language: system
         types: [python]
         require_serial: true
