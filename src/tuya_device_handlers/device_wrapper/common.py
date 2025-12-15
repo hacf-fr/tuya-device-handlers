@@ -7,7 +7,7 @@ import json
 import logging
 from typing import TYPE_CHECKING, Any, Self
 
-from .type_information import (
+from ..type_information import (
     BitmapTypeInformation,
     BooleanTypeInformation,
     EnumTypeInformation,
@@ -17,16 +17,15 @@ from .type_information import (
     StringTypeInformation,
     TypeInformation,
 )
+from .base import DeviceWrapper
+from .const import DEVICE_WARNINGS
+from .exception import SetValueOutOfRangeError
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 
 _LOGGER = logging.getLogger(__name__)
-
-# Dictionary to track logged warnings to avoid spamming logs
-# Keyed by device ID
-DEVICE_WARNINGS: dict[str, set[str]] = {}
 
 
 def _should_log_warning(device_id: str, warning_key: str) -> bool:
@@ -43,33 +42,12 @@ def _should_log_warning(device_id: str, warning_key: str) -> bool:
     return True
 
 
-class SetValueOutOfRangeError(ValueError):
-    """Attempted to send an invalid value to Tuya data point."""
-
-
-class DeviceWrapper:
-    """Base device wrapper."""
-
-    def read_device_status(self, device: CustomerDevice) -> Any | None:
-        """Read device status and convert to a Home Assistant value."""
-        raise NotImplementedError
-
-    def get_update_commands(
-        self, device: CustomerDevice, value: Any
-    ) -> list[dict[str, Any]]:
-        """Generate update commands for a Home Assistant action."""
-        raise NotImplementedError
-
-
 class DPCodeWrapper(DeviceWrapper):
     """Base device wrapper for a single DPCode.
 
     Used as a common interface for referring to a DPCode, and
     access read conversion routines.
     """
-
-    native_unit: str | None = None
-    suggested_unit: str | None = None
 
     def __init__(self, dpcode: str) -> None:
         """Init DPCodeWrapper."""
@@ -144,6 +122,14 @@ class DPCodeBitmapWrapper(DPCodeTypeInformationWrapper[BitmapTypeInformation]):
     """Simple wrapper for BitmapTypeInformation values."""
 
     _DPTYPE = BitmapTypeInformation
+
+    def read_device_status(self, device: CustomerDevice) -> int | None:
+        """Read and process raw value against this type information."""
+        if (raw_value := device.status.get(self.dpcode)) is None:
+            return None
+        if TYPE_CHECKING:
+            assert isinstance(raw_value, int)
+        return raw_value
 
 
 class DPCodeBooleanWrapper(

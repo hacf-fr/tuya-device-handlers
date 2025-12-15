@@ -9,7 +9,7 @@ from syrupy.filters import props
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.builder import TuyaSensorDefinition
-from tuya_device_handlers.device_wrapper import (
+from tuya_device_handlers.device_wrapper.common import (
     DPCodeEnumWrapper,
     DPCodeIntegerWrapper,
     DPCodeWrapper,
