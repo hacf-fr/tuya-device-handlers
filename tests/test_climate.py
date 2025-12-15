@@ -34,9 +34,9 @@ def _get_entity_details(
         int_definition := definition.target_temperature_dp_type(device)
     ) is not None and isinstance(int_definition, DPCodeIntegerWrapper):
         entity_details["target_temp_dp_code"] = int_definition.dpcode
-        entity_details["target_temp_min"] = int_definition.min
-        entity_details["target_temp_max"] = int_definition.max
-        entity_details["target_temp_step"] = int_definition.step
+        entity_details["target_temp_min"] = int_definition.min_value
+        entity_details["target_temp_max"] = int_definition.max_value
+        entity_details["target_temp_step"] = int_definition.value_step
         if (status := device.status.get(int_definition.dpcode)) is not None:
             entity_details["target_temp"] = (
                 int_definition.type_information.scale_value(status)
