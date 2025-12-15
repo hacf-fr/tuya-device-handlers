@@ -7,8 +7,7 @@ from unittest.mock import patch
 import pytest
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
-from tuya_device_handlers.device_wrapper import (
-    DEVICE_WARNINGS,
+from tuya_device_handlers.device_wrapper.common import (
     DPCodeBitmapWrapper,
     DPCodeBooleanWrapper,
     DPCodeEnumWrapper,
@@ -17,6 +16,9 @@ from tuya_device_handlers.device_wrapper import (
     DPCodeRawWrapper,
     DPCodeStringWrapper,
     DPCodeTypeInformationWrapper,
+)
+from tuya_device_handlers.device_wrapper.const import DEVICE_WARNINGS
+from tuya_device_handlers.device_wrapper.exception import (
     SetValueOutOfRangeError,
 )
 
