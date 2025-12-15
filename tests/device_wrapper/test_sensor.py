@@ -96,7 +96,7 @@ def test_sensor_wrapper(
     mock_device: CustomerDevice,
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Test EnumWindDirectionWrapper."""
+    """Test sensor wrappers."""
     mock_device.status[dpcode] = status
     mock_device.status_range[dpcode].values = status_range
     wrapper = wrapper_type.find_dpcode(mock_device, dpcode)
@@ -105,34 +105,74 @@ def test_sensor_wrapper(
     _snapshot_sensor(wrapper, mock_device, snapshot)
 
 
-def test_wind_wrapper(mock_device: CustomerDevice) -> None:
-    """Test WindDirectionEnumWrapper."""
-    dpcode = "demo_enum"
-    enum_range = (
-        '{"range": ["north", "north_north_east", "north_east",'
-        '"east_north_east","east","east_south_east","south_east",'
-        '"south_south_east","south", "south_south_west", "south_west", '
-        '"west_south_west", "west", "west_north_west", "north_west", '
-        '"north_north_west"]}'
-    )
-
-    mock_device.status_range[dpcode].values = enum_range
-    wrapper = WindDirectionEnumWrapper.find_dpcode(mock_device, dpcode)
+@pytest.mark.parametrize(
+    ("wrapper_type", "dpcode", "status_range", "status"),
+    [
+        (
+            WindDirectionEnumWrapper,
+            "demo_enum",
+            (
+                '{"range": ["north", "north_north_east", "north_east",'
+                '"east_north_east","east","east_south_east","south_east",'
+                '"south_south_east","south", "south_south_west", "south_west", '
+                '"west_south_west", "west", "west_north_west", "north_west", '
+                '"north_north_west"]}'
+            ),
+            "north_northh_east",
+        ),
+        (
+            ElectricityCurrentJsonWrapper,
+            "demo_json",
+            "{}",
+            "{}",
+        ),
+        (
+            ElectricityPowerJsonWrapper,
+            "demo_json",
+            "{}",
+            "{}",
+        ),
+        (
+            ElectricityVoltageJsonWrapper,
+            "demo_json",
+            "{}",
+            "{}",
+        ),
+        (
+            ElectricityCurrentRawWrapper,
+            "demo_raw",
+            "{}",
+            "",
+        ),
+        (
+            ElectricityPowerRawWrapper,
+            "demo_raw",
+            "{}",
+            "",
+        ),
+        (
+            ElectricityVoltageRawWrapper,
+            "demo_raw",
+            "{}",
+            "",
+        ),
+    ],
+)
+def test_sensor_invalid_value(
+    wrapper_type: type[DPCodeTypeInformationWrapper[Any]],
+    dpcode: str,
+    status_range: str,
+    status: str,
+    mock_device: CustomerDevice,
+) -> None:
+    """Test sensor wrappers with invalid or None value."""
+    mock_device.status[dpcode] = status
+    mock_device.status_range[dpcode].values = status_range
+    wrapper = wrapper_type.find_dpcode(mock_device, dpcode)
 
     assert wrapper
+    assert wrapper.read_device_status(mock_device) is None
 
     # All wrappers return None if status is None
     mock_device.status[dpcode] = None
-    assert wrapper.read_device_status(mock_device) is None
-
-    # All wrappers return None if status is missing
-    mock_device.status.pop(dpcode)
-    assert wrapper.read_device_status(mock_device) is None
-
-    # All wrappers return None if status is missing
-    mock_device.status[dpcode] = "north_north_west"
-    assert wrapper.read_device_status(mock_device) == 337.5
-
-    # All wrappers return None if status is missing
-    mock_device.status[dpcode] = "invalid"
     assert wrapper.read_device_status(mock_device) is None
