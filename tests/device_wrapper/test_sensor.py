@@ -6,13 +6,13 @@ from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.device_wrapper import DeviceWrapper
 from tuya_device_handlers.device_wrapper.sensor import (
-    EnumWindDirectionWrapper,
-    JsonElectricityCurrentWrapper,
-    JsonElectricityPowerWrapper,
-    JsonElectricityVoltageWrapper,
-    RawElectricityCurrentWrapper,
-    RawElectricityPowerWrapper,
-    RawElectricityVoltageWrapper,
+    ElectricityCurrentJsonWrapper,
+    ElectricityCurrentRawWrapper,
+    ElectricityPowerJsonWrapper,
+    ElectricityPowerRawWrapper,
+    ElectricityVoltageJsonWrapper,
+    ElectricityVoltageRawWrapper,
+    WindDirectionEnumWrapper,
 )
 
 
@@ -34,7 +34,7 @@ def _snapshot_sensor(
     ("wrapper_type", "dpcode", "status_range", "status"),
     [
         (
-            EnumWindDirectionWrapper,
+            WindDirectionEnumWrapper,
             "demo_enum",
             (
                 '{"range": ["north", "north_north_east", "north_east",'
@@ -46,37 +46,37 @@ def _snapshot_sensor(
             "north_north_east",
         ),
         (
-            JsonElectricityCurrentWrapper,
+            ElectricityCurrentJsonWrapper,
             "demo_json",
             "{}",
             '{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}',
         ),
         (
-            JsonElectricityPowerWrapper,
+            ElectricityPowerJsonWrapper,
             "demo_json",
             "{}",
             '{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}',
         ),
         (
-            JsonElectricityVoltageWrapper,
+            ElectricityVoltageJsonWrapper,
             "demo_json",
             "{}",
             '{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}',
         ),
         (
-            RawElectricityCurrentWrapper,
+            ElectricityCurrentRawWrapper,
             "demo_raw",
             "{}",
             "Ag8JJQAASAAACAAAAAAACGME",
         ),
         (
-            RawElectricityPowerWrapper,
+            ElectricityPowerRawWrapper,
             "demo_raw",
             "{}",
             "Ag8JJQAASAAACAAAAAAACGME",
         ),
         (
-            RawElectricityVoltageWrapper,
+            ElectricityVoltageRawWrapper,
             "demo_raw",
             "{}",
             "Ag8JJQAASAAACAAAAAAACGME",
@@ -101,7 +101,7 @@ def test_sensor_wrapper(
 
 
 def test_wind_wrapper(mock_device: CustomerDevice) -> None:
-    """Test EnumWindDirectionWrapper."""
+    """Test WindDirectionEnumWrapper."""
     dpcode = "demo_enum"
     enum_range = (
         '{"range": ["north", "north_north_east", "north_east",'
@@ -112,7 +112,7 @@ def test_wind_wrapper(mock_device: CustomerDevice) -> None:
     )
 
     mock_device.status_range[dpcode].values = enum_range
-    wrapper = EnumWindDirectionWrapper.find_dpcode(mock_device, dpcode)
+    wrapper = WindDirectionEnumWrapper.find_dpcode(mock_device, dpcode)
 
     assert wrapper
 
