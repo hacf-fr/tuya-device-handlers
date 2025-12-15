@@ -33,7 +33,7 @@ class WindDirectionEnumWrapper(DPCodeEnumWrapper):
         "north_north_west": 337.5,
     }
 
-    def read_device_status(self, device: CustomerDevice) -> float | None:
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
         """Read the device value for the dpcode."""
         if (status := super().read_device_status(device)) is None:
             return None
