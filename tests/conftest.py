@@ -90,7 +90,7 @@ def device_fixture() -> CustomerDevice:
         ),
     }
     mock_device.status_range = {
-        "demo_bitmap": DeviceFunction(
+        "demo_bitmap": DeviceStatusRange(
             code="demo_bitmap",
             type="Bitmap",
             values='{"label": ["motor_fault"]}',
@@ -100,27 +100,27 @@ def device_fixture() -> CustomerDevice:
             type="Boolean",
             values="{}",
         ),
-        "demo_enum": DeviceFunction(
+        "demo_enum": DeviceStatusRange(
             code="demo_enum",
             type="Enum",
             values='{"range": ["scene", "customize_scene", "colour"]}',
         ),
-        "demo_integer": DeviceFunction(
+        "demo_integer": DeviceStatusRange(
             code="demo_integer",
             type="Integer",
             values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
         ),
-        "demo_json": DeviceFunction(
+        "demo_json": DeviceStatusRange(
             code="demo_json",
             type="Json",
             values="{}",
         ),
-        "demo_raw": DeviceFunction(
+        "demo_raw": DeviceStatusRange(
             code="demo_raw",
             type="Raw",
             values="{}",
         ),
-        "demo_string": DeviceFunction(
+        "demo_string": DeviceStatusRange(
             code="demo_json",
             type="String",
             values="{}",
