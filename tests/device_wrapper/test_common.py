@@ -188,6 +188,14 @@ def test_get_update_commands_value_error(
         wrapper.get_update_commands(mock_device, value)
 
 
+def test_enum_details(mock_device: CustomerDevice) -> None:
+    """Test scale_value/scale_value_back."""
+    wrapper = DPCodeEnumWrapper.find_dpcode(mock_device, "demo_enum")
+
+    assert wrapper
+    assert wrapper.range == ["scene", "customize_scene", "colour"]
+
+
 def test_integer_details(mock_device: CustomerDevice) -> None:
     """Test scale_value/scale_value_back."""
     wrapper = DPCodeIntegerWrapper.find_dpcode(mock_device, "demo_integer")
