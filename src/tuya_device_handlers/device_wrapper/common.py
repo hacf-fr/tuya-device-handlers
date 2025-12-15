@@ -180,7 +180,7 @@ class DPCodeEnumWrapper(DPCodeTypeInformationWrapper[EnumTypeInformation]):
     def __init__(
         self, dpcode: str, type_information: EnumTypeInformation
     ) -> None:
-        """Init DPCodeIntegerWrapper."""
+        """Init DPCodeEnumWrapper."""
         super().__init__(dpcode, type_information)
         self.range = type_information.range
 
