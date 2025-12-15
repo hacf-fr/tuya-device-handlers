@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .common import DPCodeEnumWrapper
+from ..raw_data_model import ElectricityData
+from .common import DPCodeEnumWrapper, DPCodeJsonWrapper, DPCodeRawWrapper
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
@@ -37,3 +38,83 @@ class EnumWindDirectionWrapper(DPCodeEnumWrapper):
         if (status := super().read_device_status(device)) is None:
             return None
         return self._WIND_DIRECTIONS.get(status)
+
+
+class JsonElectricityCurrentWrapper(DPCodeJsonWrapper):
+    """Custom DPCode Wrapper for extracting electricity current from JSON."""
+
+    native_unit = "A"
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
+        """Read the device value for the dpcode."""
+        if (status := super().read_device_status(device)) is None:
+            return None
+        return status.get("electricCurrent")
+
+
+class JsonElectricityPowerWrapper(DPCodeJsonWrapper):
+    """Custom DPCode Wrapper for extracting electricity power from JSON."""
+
+    native_unit = "kW"
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
+        """Read the device value for the dpcode."""
+        if (status := super().read_device_status(device)) is None:
+            return None
+        return status.get("power")
+
+
+class JsonElectricityVoltageWrapper(DPCodeJsonWrapper):
+    """Custom DPCode Wrapper for extracting electricity voltage from JSON."""
+
+    native_unit = "V"
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
+        """Read the device value for the dpcode."""
+        if (status := super().read_device_status(device)) is None:
+            return None
+        return status.get("voltage")
+
+
+class RawElectricityCurrentWrapper(DPCodeRawWrapper):
+    """Custom DPCode Wrapper for extracting electricity current from base64."""
+
+    native_unit = "mA"
+    suggested_unit = "A"
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
+        """Read the device value for the dpcode."""
+        if (raw_value := super().read_device_status(device)) is None or (
+            value := ElectricityData.from_bytes(raw_value)
+        ) is None:
+            return None
+        return value.current
+
+
+class RawElectricityPowerWrapper(DPCodeRawWrapper):
+    """Custom DPCode Wrapper for extracting electricity power from base64."""
+
+    native_unit = "W"
+    suggested_unit = "kW"
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
+        """Read the device value for the dpcode."""
+        if (raw_value := super().read_device_status(device)) is None or (
+            value := ElectricityData.from_bytes(raw_value)
+        ) is None:
+            return None
+        return value.power
+
+
+class RawElectricityVoltageWrapper(DPCodeRawWrapper):
+    """Custom DPCode Wrapper for extracting electricity voltage from base64."""
+
+    native_unit = "V"
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:  # type: ignore[override]
+        """Read the device value for the dpcode."""
+        if (raw_value := super().read_device_status(device)) is None or (
+            value := ElectricityData.from_bytes(raw_value)
+        ) is None:
+            return None
+        return value.voltage

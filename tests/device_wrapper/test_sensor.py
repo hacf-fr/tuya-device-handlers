@@ -5,7 +5,15 @@ from syrupy.assertion import SnapshotAssertion
 from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 from tuya_device_handlers.device_wrapper import DeviceWrapper
-from tuya_device_handlers.device_wrapper.sensor import EnumWindDirectionWrapper
+from tuya_device_handlers.device_wrapper.sensor import (
+    EnumWindDirectionWrapper,
+    JsonElectricityCurrentWrapper,
+    JsonElectricityPowerWrapper,
+    JsonElectricityVoltageWrapper,
+    RawElectricityCurrentWrapper,
+    RawElectricityPowerWrapper,
+    RawElectricityVoltageWrapper,
+)
 
 
 def _snapshot_sensor(
@@ -36,7 +44,43 @@ def _snapshot_sensor(
                 '"north_north_west"]}'
             ),
             "north_north_east",
-        )
+        ),
+        (
+            JsonElectricityCurrentWrapper,
+            "demo_json",
+            "{}",
+            '{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}',
+        ),
+        (
+            JsonElectricityPowerWrapper,
+            "demo_json",
+            "{}",
+            '{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}',
+        ),
+        (
+            JsonElectricityVoltageWrapper,
+            "demo_json",
+            "{}",
+            '{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}',
+        ),
+        (
+            RawElectricityCurrentWrapper,
+            "demo_raw",
+            "{}",
+            "Ag8JJQAASAAACAAAAAAACGME",
+        ),
+        (
+            RawElectricityPowerWrapper,
+            "demo_raw",
+            "{}",
+            "Ag8JJQAASAAACAAAAAAACGME",
+        ),
+        (
+            RawElectricityVoltageWrapper,
+            "demo_raw",
+            "{}",
+            "Ag8JJQAASAAACAAAAAAACGME",
+        ),
     ],
 )
 def test_sensor_wrapper(
@@ -50,7 +94,7 @@ def test_sensor_wrapper(
     """Test EnumWindDirectionWrapper."""
     mock_device.status[dpcode] = status
     mock_device.status_range[dpcode].values = status_range
-    wrapper = EnumWindDirectionWrapper.find_dpcode(mock_device, dpcode)
+    wrapper = wrapper_type.find_dpcode(mock_device, dpcode)
 
     assert wrapper
     _snapshot_sensor(wrapper, mock_device, snapshot)
