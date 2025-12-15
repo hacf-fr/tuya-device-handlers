@@ -9,7 +9,7 @@ import pathlib
 from typing import TYPE_CHECKING, Any, Self
 
 from tuya_device_handlers.const import DPType
-from tuya_device_handlers.device_wrapper import DeviceWrapper
+from tuya_device_handlers.device_wrapper.base import DeviceWrapper
 from tuya_device_handlers.helpers import (
     TuyaClimateHVACMode,
     TuyaCoverDeviceClass,
