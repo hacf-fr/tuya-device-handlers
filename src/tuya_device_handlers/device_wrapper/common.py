@@ -175,6 +175,14 @@ class DPCodeEnumWrapper(DPCodeTypeInformationWrapper[EnumTypeInformation]):
     """Simple wrapper for EnumTypeInformation values."""
 
     _DPTYPE = EnumTypeInformation
+    range: list[str]
+
+    def __init__(
+        self, dpcode: str, type_information: EnumTypeInformation
+    ) -> None:
+        """Init DPCodeEnumWrapper."""
+        super().__init__(dpcode, type_information)
+        self.range = type_information.range
 
     def read_device_status(self, device: CustomerDevice) -> str | None:
         """Read and process raw value against this type information."""

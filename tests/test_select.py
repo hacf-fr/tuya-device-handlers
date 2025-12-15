@@ -30,10 +30,10 @@ def _get_entity_details(
         enum_definition := definition.dp_type(device)
     ) is not None and isinstance(enum_definition, DPCodeEnumWrapper):
         entity_details["dp_code"] = enum_definition.dpcode
-        entity_details["options"] = enum_definition.type_information.range
+        entity_details["options"] = enum_definition.range
         if (
             status := device.status.get(definition.key)
-        ) is not None and status in enum_definition.type_information.range:
+        ) is not None and status in enum_definition.range:
             entity_details["state"] = status
 
     return entity_details

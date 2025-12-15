@@ -12,6 +12,7 @@ class DeviceWrapper:
     """Base device wrapper."""
 
     native_unit: str | None = None
+    range: list[str] | None = None
     suggested_unit: str | None = None
 
     def read_device_status(self, device: CustomerDevice) -> Any | None:
