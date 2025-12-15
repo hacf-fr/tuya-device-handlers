@@ -28,7 +28,7 @@ def _snapshot_sensor(
 ) -> None:
     """Snapshot device wrapper."""
     assert {
-        "options": wrapper.range,
+        "options": wrapper.options,
         "native_unit": wrapper.native_unit,
         "state": wrapper.read_device_status(mock_device),
         "suggested_unit": wrapper.suggested_unit,

@@ -175,14 +175,14 @@ class DPCodeEnumWrapper(DPCodeTypeInformationWrapper[EnumTypeInformation]):
     """Simple wrapper for EnumTypeInformation values."""
 
     _DPTYPE = EnumTypeInformation
-    range: list[str]
+    options: list[str]
 
     def __init__(
         self, dpcode: str, type_information: EnumTypeInformation
     ) -> None:
         """Init DPCodeEnumWrapper."""
         super().__init__(dpcode, type_information)
-        self.range = type_information.range
+        self.options = type_information.range
 
     def read_device_status(self, device: CustomerDevice) -> str | None:
         """Read and process raw value against this type information."""
@@ -231,9 +231,11 @@ class DPCodeIntegerWrapper(
         """Init DPCodeIntegerWrapper."""
         super().__init__(dpcode, type_information)
         self.native_unit = type_information.unit
-        self.min = self.type_information.scale_value(type_information.min)
-        self.max = self.type_information.scale_value(type_information.max)
-        self.step = self.type_information.scale_value(type_information.step)
+        self.min_value = self.type_information.scale_value(type_information.min)
+        self.max_value = self.type_information.scale_value(type_information.max)
+        self.value_step = self.type_information.scale_value(
+            type_information.step
+        )
 
     def read_device_status(self, device: CustomerDevice) -> float | None:
         """Read and process raw value against this type information."""

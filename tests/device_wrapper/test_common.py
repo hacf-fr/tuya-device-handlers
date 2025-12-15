@@ -193,7 +193,7 @@ def test_enum_details(mock_device: CustomerDevice) -> None:
     wrapper = DPCodeEnumWrapper.find_dpcode(mock_device, "demo_enum")
 
     assert wrapper
-    assert wrapper.range == ["scene", "customize_scene", "colour"]
+    assert wrapper.options == ["scene", "customize_scene", "colour"]
 
 
 def test_integer_details(mock_device: CustomerDevice) -> None:
@@ -201,7 +201,7 @@ def test_integer_details(mock_device: CustomerDevice) -> None:
     wrapper = DPCodeIntegerWrapper.find_dpcode(mock_device, "demo_integer")
 
     assert wrapper
-    assert wrapper.max == 100
-    assert wrapper.min == 0
-    assert wrapper.step == 0.1
+    assert wrapper.max_value == 100
+    assert wrapper.min_value == 0
+    assert wrapper.value_step == 0.1
     assert wrapper.native_unit == "%"
