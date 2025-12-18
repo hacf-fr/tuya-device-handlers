@@ -22,7 +22,7 @@ from tuya_device_handlers.device_wrapper.sensor import (
 
 
 def _snapshot_sensor(
-    wrapper: DeviceWrapper,
+    wrapper: DeviceWrapper[Any],
     mock_device: CustomerDevice,
     snapshot: SnapshotAssertion,
 ) -> None:

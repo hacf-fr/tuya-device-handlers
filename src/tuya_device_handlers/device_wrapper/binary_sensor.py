@@ -5,13 +5,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Self
 
 from ..type_information import BitmapTypeInformation
+from .base import DeviceWrapper
 from .common import DPCodeBitmapWrapper
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 
-class DPCodeBitmapBitWrapper(DPCodeBitmapWrapper):
+class DPCodeBitmapBitWrapper(DPCodeBitmapWrapper, DeviceWrapper[bool]):
     """Simple wrapper for a specific bit in bitmap values."""
 
     def __init__(

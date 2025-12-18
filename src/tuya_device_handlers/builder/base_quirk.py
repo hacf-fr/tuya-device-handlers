@@ -25,7 +25,9 @@ if TYPE_CHECKING:
     from tuya_device_handlers.registry import QuirksRegistry
 
 
-type DeviceWrapperGenerator = Callable[[CustomerDevice], DeviceWrapper | None]
+type DeviceWrapperGenerator = Callable[
+    [CustomerDevice], DeviceWrapper[Any] | None
+]
 
 
 def _none_type_generator(device: CustomerDevice) -> None:

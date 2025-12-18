@@ -5,13 +5,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from ..raw_data_model import ElectricityData
+from .base import DeviceWrapper
 from .common import DPCodeEnumWrapper, DPCodeJsonWrapper, DPCodeRawWrapper
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
 
-class WindDirectionEnumWrapper(DPCodeEnumWrapper):
+class WindDirectionEnumWrapper(DPCodeEnumWrapper, DeviceWrapper[str]):
     """Custom DPCode Wrapper for converting enum to wind direction."""
 
     _WIND_DIRECTIONS = {
@@ -40,7 +41,7 @@ class WindDirectionEnumWrapper(DPCodeEnumWrapper):
         return self._WIND_DIRECTIONS.get(status)
 
 
-class ElectricityCurrentJsonWrapper(DPCodeJsonWrapper):
+class ElectricityCurrentJsonWrapper(DPCodeJsonWrapper, DeviceWrapper[float]):
     """Custom DPCode Wrapper for extracting electricity current from JSON."""
 
     native_unit = "A"
@@ -52,7 +53,7 @@ class ElectricityCurrentJsonWrapper(DPCodeJsonWrapper):
         return status.get("electricCurrent")
 
 
-class ElectricityPowerJsonWrapper(DPCodeJsonWrapper):
+class ElectricityPowerJsonWrapper(DPCodeJsonWrapper, DeviceWrapper[float]):
     """Custom DPCode Wrapper for extracting electricity power from JSON."""
 
     native_unit = "kW"
@@ -64,7 +65,7 @@ class ElectricityPowerJsonWrapper(DPCodeJsonWrapper):
         return status.get("power")
 
 
-class ElectricityVoltageJsonWrapper(DPCodeJsonWrapper):
+class ElectricityVoltageJsonWrapper(DPCodeJsonWrapper, DeviceWrapper[float]):
     """Custom DPCode Wrapper for extracting electricity voltage from JSON."""
 
     native_unit = "V"
@@ -76,7 +77,7 @@ class ElectricityVoltageJsonWrapper(DPCodeJsonWrapper):
         return status.get("voltage")
 
 
-class ElectricityCurrentRawWrapper(DPCodeRawWrapper):
+class ElectricityCurrentRawWrapper(DPCodeRawWrapper, DeviceWrapper[float]):
     """Custom DPCode Wrapper for extracting electricity current from base64."""
 
     native_unit = "mA"
@@ -91,7 +92,7 @@ class ElectricityCurrentRawWrapper(DPCodeRawWrapper):
         return value.current
 
 
-class ElectricityPowerRawWrapper(DPCodeRawWrapper):
+class ElectricityPowerRawWrapper(DPCodeRawWrapper, DeviceWrapper[float]):
     """Custom DPCode Wrapper for extracting electricity power from base64."""
 
     native_unit = "W"
@@ -106,7 +107,7 @@ class ElectricityPowerRawWrapper(DPCodeRawWrapper):
         return value.power
 
 
-class ElectricityVoltageRawWrapper(DPCodeRawWrapper):
+class ElectricityVoltageRawWrapper(DPCodeRawWrapper, DeviceWrapper[float]):
     """Custom DPCode Wrapper for extracting electricity voltage from base64."""
 
     native_unit = "V"
