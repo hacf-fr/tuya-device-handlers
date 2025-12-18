@@ -42,7 +42,7 @@ def _should_log_warning(device_id: str, warning_key: str) -> bool:
     return True
 
 
-class DPCodeWrapper(DeviceWrapper):
+class DPCodeWrapper(DeviceWrapper[Any]):
     """Base device wrapper for a single DPCode.
 
     Used as a common interface for referring to a DPCode, and
