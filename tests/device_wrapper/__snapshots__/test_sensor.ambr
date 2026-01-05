@@ -2,7 +2,6 @@
 # name: test_sensor_wrapper[ElectricityCurrentJsonWrapper-demo_json-{}-{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}]
   dict({
     'native_unit': 'A',
-    'options': None,
     'state': 599.552,
     'suggested_unit': None,
   })
@@ -10,7 +9,6 @@
 # name: test_sensor_wrapper[ElectricityCurrentRawWrapper-demo_raw-{}-Ag8JJQAASAAACAAAAAAACGME]
   dict({
     'native_unit': 'mA',
-    'options': None,
     'state': 72,
     'suggested_unit': 'A',
   })
@@ -18,7 +16,6 @@
 # name: test_sensor_wrapper[ElectricityPowerJsonWrapper-demo_json-{}-{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}]
   dict({
     'native_unit': 'kW',
-    'options': None,
     'state': 6.912,
     'suggested_unit': None,
   })
@@ -26,7 +23,6 @@
 # name: test_sensor_wrapper[ElectricityPowerRawWrapper-demo_raw-{}-Ag8JJQAASAAACAAAAAAACGME]
   dict({
     'native_unit': 'W',
-    'options': None,
     'state': 8,
     'suggested_unit': 'kW',
   })
@@ -34,7 +30,6 @@
 # name: test_sensor_wrapper[ElectricityVoltageJsonWrapper-demo_json-{}-{"electricCurrent": 599.552, "power": 6.912, "voltage": 52.7}]
   dict({
     'native_unit': 'V',
-    'options': None,
     'state': 52.7,
     'suggested_unit': None,
   })
@@ -42,7 +37,6 @@
 # name: test_sensor_wrapper[ElectricityVoltageRawWrapper-demo_raw-{}-Ag8JJQAASAAACAAAAAAACGME]
   dict({
     'native_unit': 'V',
-    'options': None,
     'state': 234.1,
     'suggested_unit': None,
   })

@@ -27,12 +27,15 @@ def _snapshot_sensor(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Snapshot device wrapper."""
-    assert {
-        "options": wrapper.options,
+    expected = {
         "native_unit": wrapper.native_unit,
         "state": wrapper.read_device_status(mock_device),
         "suggested_unit": wrapper.suggested_unit,
-    } == snapshot
+    }
+    for key in ("options",):
+        if hasattr(wrapper, key):
+            expected[key] = getattr(wrapper, key)
+    assert expected == snapshot
 
 
 @pytest.mark.parametrize(
