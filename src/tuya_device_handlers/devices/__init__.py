@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import importlib
+import importlib.util
 import logging
 import pathlib
 import pkgutil
 import sys
+from typing import TYPE_CHECKING
 
 from tuya_device_handlers import TUYA_QUIRKS_REGISTRY
 
@@ -46,9 +48,13 @@ def register_tuya_quirks(custom_quirks_path: str | None = None) -> None:
 
         try:
             spec = importer.find_spec(modname)  # type: ignore[call-arg]
-            module = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+            if TYPE_CHECKING:
+                assert spec is not None
+                assert spec.loader is not None
+
+            module = importlib.util.module_from_spec(spec)
             sys.modules[modname] = module
-            spec.loader.exec_module(module)  # type: ignore[union-attr]
+            spec.loader.exec_module(module)
         except Exception:
             _LOGGER.exception(
                 "Unexpected exception importing custom quirk %r", modname
