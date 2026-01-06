@@ -205,3 +205,13 @@ def test_integer_details(mock_device: CustomerDevice) -> None:
     assert wrapper.min_value == 0
     assert wrapper.value_step == 0.1
     assert wrapper.native_unit == "%"
+
+
+def test_skip_update(mock_device: CustomerDevice) -> None:
+    """Test skip_update."""
+    wrapper = DPCodeIntegerWrapper.find_dpcode(mock_device, "demo_integer")
+
+    assert wrapper
+    assert wrapper.skip_update(mock_device, None) is True
+    assert wrapper.skip_update(mock_device, ["a", "b", "c"]) is True
+    assert wrapper.skip_update(mock_device, ["a", "demo_integer", "c"]) is False
