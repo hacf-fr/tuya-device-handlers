@@ -20,6 +20,17 @@ class DeviceWrapper[T]:
 
     options: list[str]
 
+    def skip_update(
+        self,
+        device: CustomerDevice,
+        updated_status_properties: list[str] | None,
+    ) -> bool:
+        """Determine if the wrapper should skip an update.
+
+        The default is to always skip, unless overridden in subclasses.
+        """
+        return True
+
     def read_device_status(self, device: CustomerDevice) -> T | None:
         """Read device status and convert to a Home Assistant value."""
         raise NotImplementedError
