@@ -1,7 +1,6 @@
 # Tuya quirks library
 
 [![PyPI](https://img.shields.io/pypi/v/tuya-device-handlers.svg)][pypi_]
-[![Status](https://img.shields.io/pypi/status/tuya-device-handlers.svg)][status]
 [![Python Version](https://img.shields.io/pypi/pyversions/tuya-device-handlers)][python version]
 [![License](https://img.shields.io/pypi/l/tuya-device-handlers)][license]
 
@@ -10,16 +9,15 @@
 [![Codecov](https://codecov.io/gh/hacf-fr/tuya-device-handlers/branch/main/graph/badge.svg)][codecov]
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
-[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
+[![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)][ruff]
 
 [pypi_]: https://pypi.org/project/tuya-device-handlers/
-[status]: https://pypi.org/project/tuya-device-handlers/
 [python version]: https://pypi.org/project/tuya-device-handlers
 [read the docs]: https://tuya-device-handlers.readthedocs.io/
 [tests]: https://github.com/hacf-fr/tuya-device-handlers/actions?workflow=Tests
 [codecov]: https://app.codecov.io/gh/hacf-fr/tuya-device-handlers
 [pre-commit]: https://github.com/pre-commit/pre-commit
-[black]: https://github.com/psf/black
+[ruff]: https://github.com/astral-sh/ruff
 
 ## Features
 
