@@ -2279,13 +2279,13 @@ telegram = ["requests"]
 
 [[package]]
 name = "tuya-device-sharing-sdk"
-version = "0.2.8"
+version = "0.2.9"
 description = "A Python sdk for Tuya Open API, which provides IoT capabilities, maintained by Tuya official"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "tuya_device_sharing_sdk-0.2.8-py3-none-any.whl", hash = "sha256:e1d7af1e7ebf755f84469289706e78185de5bad853c6f4b45f9c4df11ff3bf8d"},
+    {file = "tuya_device_sharing_sdk-0.2.9-py3-none-any.whl", hash = "sha256:18070a7f777c6ac2ce6b1e56c196558d12868614a34df58d9e7503aa6a4738c2"},
 ]
 
 [package.dependencies]
