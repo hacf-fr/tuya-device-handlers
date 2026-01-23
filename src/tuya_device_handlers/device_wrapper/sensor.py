@@ -66,7 +66,7 @@ class DeltaIntegerWrapper(DPCodeIntegerWrapper):
         self,
         device: CustomerDevice,
         updated_status_properties: list[str] | None,
-        dp_timestamps: dict[str, int] | None,
+        dp_timestamps: dict[str, int] | None = None,
     ) -> bool:
         """Override skip_update to process delta updates.
 
