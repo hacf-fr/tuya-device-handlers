@@ -83,4 +83,3 @@ def test_integer_scaling(mock_device: CustomerDevice) -> None:
     assert type_information.scale == 1
     assert type_information.scale_value(150) == 15
     assert type_information.scale_value_back(15) == 150
-    assert type_information.report_type == "sum"

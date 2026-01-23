@@ -2,14 +2,23 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
+from ..helpers.homeassistant import TuyaSensorStateClass
 from ..raw_data_model import ElectricityData
 from .base import DeviceWrapper
-from .common import DPCodeEnumWrapper, DPCodeJsonWrapper, DPCodeRawWrapper
+from .common import (
+    DPCodeEnumWrapper,
+    DPCodeIntegerWrapper,
+    DPCodeJsonWrapper,
+    DPCodeRawWrapper,
+)
 
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class WindDirectionEnumWrapper(DPCodeEnumWrapper, DeviceWrapper[str]):
@@ -39,6 +48,56 @@ class WindDirectionEnumWrapper(DPCodeEnumWrapper, DeviceWrapper[str]):
         if (status := super().read_device_status(device)) is None:
             return None
         return self._WIND_DIRECTIONS.get(status)
+
+
+class DeltaIntegerWrapper(DPCodeIntegerWrapper):
+    """Wrapper for integer values with delta report accumulation.
+
+    This wrapper handles sensors that report incremental (delta) values
+    instead of cumulative totals. It accumulates the delta values locally
+    to provide a running total.
+    """
+
+    _accumulated_value: float = 0
+    _last_dp_timestamp: int | None = None
+    state_class = TuyaSensorStateClass.TOTAL_INCREASING
+
+    def skip_update(
+        self,
+        device: CustomerDevice,
+        updated_status_properties: list[str] | None,
+        dp_timestamps: dict[str, int] | None,
+    ) -> bool:
+        """Override skip_update to process delta updates.
+
+        Processes delta accumulation before determining if update should be skipped.
+        """
+        if (
+            super().skip_update(
+                device, updated_status_properties, dp_timestamps
+            )
+            or dp_timestamps is None
+            or (current_timestamp := dp_timestamps.get(self.dpcode)) is None
+            or current_timestamp == self._last_dp_timestamp
+            or (raw_value := super().read_device_status(device)) is None
+        ):
+            return True
+
+        delta = float(raw_value)
+        self._accumulated_value += delta
+        _LOGGER.debug(
+            "Delta update for %s: +%s, total: %s",
+            self.dpcode,
+            delta,
+            self._accumulated_value,
+        )
+
+        self._last_dp_timestamp = current_timestamp
+        return False
+
+    def read_device_status(self, device: CustomerDevice) -> float | None:
+        """Read device status, returning accumulated value for delta reports."""
+        return self._accumulated_value
 
 
 class ElectricityCurrentJsonWrapper(DPCodeJsonWrapper, DeviceWrapper[float]):

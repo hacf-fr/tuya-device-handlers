@@ -33,6 +33,7 @@ def device_fixture() -> CustomerDevice:
         "demo_boolean": True,
         "demo_enum": "customize_scene",
         "demo_integer": 123,
+        "demo_integer_sum": 234,
         "demo_json": '{"h": 210,"s": 1000,"v": 1000}',
         "demo_raw": "fwceBQF/DgACAX8UAAQB",
         "demo_string": "a_string",
@@ -73,6 +74,11 @@ def device_fixture() -> CustomerDevice:
             type="Integer",
             values="{}",
         ),
+        "demo_integer_sum": DeviceFunction(
+            code="demo_integer_sum",
+            type="Integer",
+            values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
+        ),
         "demo_json": DeviceFunction(
             code="demo_json",
             type="Json",
@@ -107,6 +113,11 @@ def device_fixture() -> CustomerDevice:
         ),
         "demo_integer": DeviceStatusRange(
             code="demo_integer",
+            type="Integer",
+            values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
+        ),
+        "demo_integer_sum": DeviceStatusRange(
+            code="demo_integer_sum",
             type="Integer",
             values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
             report_type="sum",
