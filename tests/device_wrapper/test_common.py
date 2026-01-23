@@ -212,6 +212,9 @@ def test_skip_update(mock_device: CustomerDevice) -> None:
     wrapper = DPCodeIntegerWrapper.find_dpcode(mock_device, "demo_integer")
 
     assert wrapper
-    assert wrapper.skip_update(mock_device, None) is True
-    assert wrapper.skip_update(mock_device, ["a", "b", "c"]) is True
-    assert wrapper.skip_update(mock_device, ["a", "demo_integer", "c"]) is False
+    assert wrapper.skip_update(mock_device, None, None) is True
+    assert wrapper.skip_update(mock_device, ["a", "b", "c"], {}) is True
+    assert (
+        wrapper.skip_update(mock_device, ["a", "demo_integer", "c"], {})
+        is False
+    )
