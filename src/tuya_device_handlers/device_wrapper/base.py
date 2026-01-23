@@ -24,7 +24,7 @@ class DeviceWrapper[T]:
         self,
         device: CustomerDevice,
         updated_status_properties: list[str] | None,
-        dp_timestamps: dict[str, int] | None,
+        dp_timestamps: dict[str, int] | None = None,
     ) -> bool:
         """Determine if the wrapper should skip an update.
 
