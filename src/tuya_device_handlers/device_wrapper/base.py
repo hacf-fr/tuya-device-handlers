@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from ..helpers.homeassistant import TuyaSensorStateClass
+
 if TYPE_CHECKING:
     from tuya_sharing import CustomerDevice  # type: ignore[import-untyped]
 
@@ -13,12 +15,20 @@ class DeviceWrapper[T]:
 
     native_unit: str | None = None
     suggested_unit: str | None = None
+    state_class: TuyaSensorStateClass | None = None
 
     max_value: float
     min_value: float
     value_step: float
 
     options: list[str]
+
+    def initialize(self, device: CustomerDevice) -> None:
+        """Initialize the wrapper with device data.
+
+        Called when the entity is added to Home Assistant.
+        Override in subclasses to perform initialization logic.
+        """
 
     def skip_update(
         self,

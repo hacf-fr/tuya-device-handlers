@@ -71,3 +71,19 @@ def create_device(fixture_filename: str) -> CustomerDevice:
         ) or ((dp_type := device.function.get(key)) and dp_type.type == "Json"):
             device.status[key] = json.dumps(value)
     return device
+
+
+def send_device_update(
+    device: CustomerDevice,
+    updated_status_properties: dict[str, Any] | None = None,
+) -> None:
+    """Send device update"""
+    property_list: list[str] = []
+    if updated_status_properties:
+        for key, value in updated_status_properties.items():
+            if key not in device.status:
+                raise ValueError(
+                    f"Property {key} not found in device status: {device.status}"
+                )
+            device.status[key] = value
+            property_list.append(key)

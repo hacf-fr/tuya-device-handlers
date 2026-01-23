@@ -11,6 +11,7 @@ from tuya_device_handlers.device_wrapper.common import (
     DPCodeTypeInformationWrapper,
 )
 from tuya_device_handlers.device_wrapper.sensor import (
+    DeltaIntegerWrapper,
     ElectricityCurrentJsonWrapper,
     ElectricityCurrentRawWrapper,
     ElectricityPowerJsonWrapper,
@@ -19,6 +20,9 @@ from tuya_device_handlers.device_wrapper.sensor import (
     ElectricityVoltageRawWrapper,
     WindDirectionEnumWrapper,
 )
+from tuya_device_handlers.helpers.homeassistant import TuyaSensorStateClass
+
+from . import send_wrapper_update
 
 
 def _snapshot_sensor(
@@ -30,6 +34,7 @@ def _snapshot_sensor(
     expected = {
         "native_unit": wrapper.native_unit,
         "state": wrapper.read_device_status(mock_device),
+        "state_class": wrapper.state_class,
         "suggested_unit": wrapper.suggested_unit,
     }
     for key in ("options",):
@@ -52,6 +57,12 @@ def _snapshot_sensor(
                 '"north_north_west"]}'
             ),
             "north_north_east",
+        ),
+        (
+            DeltaIntegerWrapper,
+            "demo_integer_sum",
+            '{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
+            123,
         ),
         (
             ElectricityCurrentJsonWrapper,
@@ -95,7 +106,7 @@ def test_sensor_wrapper(
     wrapper_type: type[DPCodeTypeInformationWrapper[Any]],
     dpcode: str,
     status_range: str,
-    status: str,
+    status: Any,
     mock_device: CustomerDevice,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -179,3 +190,93 @@ def test_sensor_invalid_value(
     # All wrappers return None if status is None
     mock_device.status[dpcode] = None
     assert wrapper.read_device_status(mock_device) is None
+
+
+def test_delta_sensor(
+    mock_device: CustomerDevice,
+) -> None:
+    """Test DeltaIntegerWrapper wrapper."""
+    dpcode = "demo_integer_sum"
+    timestamp = 123456789
+    wrapper = DeltaIntegerWrapper.find_dpcode(mock_device, dpcode)
+
+    assert wrapper
+    wrapper.initialize(mock_device)
+    assert wrapper.state_class == TuyaSensorStateClass.TOTAL_INCREASING
+    assert wrapper.read_device_status(mock_device) == 0
+
+    # Send delta update
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": 200},
+        {"demo_integer_sum": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 20
+
+    # Send delta update
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": 200},
+        {"demo_integer_sum": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 20
+
+    # Send delta update (multiple dpcode)
+    timestamp += 100
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": 100, "demo_integer": 100},
+        {"demo_integer_sum": timestamp, "demo_integer": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 30
+
+    # Send delta update (timestamp not incremented)
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": 100, "demo_integer": 100},
+        {"demo_integer_sum": timestamp, "demo_integer": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 30  # unchanged
+
+    # Send delta update (unrelated dpcode)
+    timestamp += 100
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer": 100},
+        {"demo_integer": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 30  # unchanged
+
+    # Send delta update
+    timestamp += 100
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": 50, "demo_integer": 100},
+        {"demo_integer_sum": timestamp, "demo_integer": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 35
+
+    # Send delta update (None value)
+    timestamp += 100
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": None},
+        {"demo_integer_sum": timestamp},
+    )
+    assert wrapper.read_device_status(mock_device) == 35  # unchanged
+
+    # Send delta update (no timestamp - skipped)
+    send_wrapper_update(
+        mock_device,
+        wrapper,
+        {"demo_integer_sum": 200},
+        None,
+    )
+    assert wrapper.read_device_status(mock_device) == 35  # unchanged
