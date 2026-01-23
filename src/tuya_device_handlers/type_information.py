@@ -24,7 +24,9 @@ class TypeInformation:
     type_data: str
 
     @classmethod
-    def _from_json(cls, dpcode: str, type_data: str) -> Self | None:
+    def _from_json(
+        cls, dpcode: str, type_data: str, *, report_type: str | None
+    ) -> Self | None:
         """Load JSON string and return a TypeInformation object."""
         return cls(dpcode=dpcode, type_data=type_data)
 
@@ -50,13 +52,20 @@ class TypeInformation:
         )
 
         for dpcode in dpcodes:
+            report_type = (
+                status_range.report_type
+                if (status_range := device.status_range.get(dpcode))
+                else None
+            )
             for device_specs in lookup_tuple:
                 if (
                     (current_definition := device_specs.get(dpcode))
                     and DPType.try_parse(current_definition.type) is cls._DPTYPE
                     and (
                         type_information := cls._from_json(
-                            dpcode=dpcode, type_data=current_definition.values
+                            dpcode=dpcode,
+                            type_data=current_definition.values,
+                            report_type=report_type,
                         )
                     )
                 ):
@@ -74,7 +83,9 @@ class BitmapTypeInformation(TypeInformation):
     label: list[str]
 
     @classmethod
-    def _from_json(cls, dpcode: str, type_data: str) -> Self | None:
+    def _from_json(
+        cls, dpcode: str, type_data: str, *, report_type: str | None
+    ) -> Self | None:
         """Load JSON string and return a BitmapTypeInformation object."""
         if not (parsed := cast(dict[str, Any] | None, json.loads(type_data))):
             return None
@@ -101,7 +112,9 @@ class EnumTypeInformation(TypeInformation):
     range: list[str]
 
     @classmethod
-    def _from_json(cls, dpcode: str, type_data: str) -> Self | None:
+    def _from_json(
+        cls, dpcode: str, type_data: str, *, report_type: str | None
+    ) -> Self | None:
         """Load JSON string and return an EnumTypeInformation object."""
         if not (parsed := json.loads(type_data)):
             return None
@@ -123,6 +136,7 @@ class IntegerTypeInformation(TypeInformation):
     scale: int
     step: int
     unit: str | None = None
+    report_type: str | None
 
     def scale_value(self, value: int) -> float:
         """Scale a value."""
@@ -133,7 +147,9 @@ class IntegerTypeInformation(TypeInformation):
         return round(value * (10**self.scale))  # type: ignore[no-any-return]
 
     @classmethod
-    def _from_json(cls, dpcode: str, type_data: str) -> Self | None:
+    def _from_json(
+        cls, dpcode: str, type_data: str, *, report_type: str | None
+    ) -> Self | None:
         """Load JSON string and return an IntegerTypeInformation object."""
         if not (parsed := cast(dict[str, Any] | None, json.loads(type_data))):
             return None
@@ -146,6 +162,7 @@ class IntegerTypeInformation(TypeInformation):
             scale=int(parsed["scale"]),
             step=int(parsed["step"]),
             unit=parsed.get("unit"),
+            report_type=report_type,
         )
 
 

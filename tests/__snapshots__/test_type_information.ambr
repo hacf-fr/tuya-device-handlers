@@ -30,6 +30,7 @@
     'dpcode': 'demo_integer',
     'max': 1000,
     'min': 0,
+    'report_type': 'sum',
     'scale': 1,
     'step': 1,
     'type_data': '{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',

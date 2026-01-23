@@ -58,6 +58,7 @@ def create_device(fixture_filename: str) -> CustomerDevice:
             code=value.get("code"),
             type=value["type"],
             values=json.dumps(value["value"]),
+            report_type=value.get("report_type"),
         )
         for key, value in details["status_range"].items()
     }
