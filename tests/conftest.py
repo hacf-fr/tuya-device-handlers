@@ -109,6 +109,7 @@ def device_fixture() -> CustomerDevice:
             code="demo_integer",
             type="Integer",
             values='{"unit": "%","min": 0,"max": 1000,"scale": 1,"step": 1}',
+            report_type="sum",
         ),
         "demo_json": DeviceStatusRange(
             code="demo_json",
