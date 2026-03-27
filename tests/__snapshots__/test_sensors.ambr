@@ -1,0 +1,18 @@
+# serializer version: 1
+# name: test_entities[cl_lfkr93x0ukp5gaia.json][time_total-definition]
+  dict({
+    'device_class': None,
+    'entity_category': <TuyaEntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'key': <TuyaDPCode.TIME_TOTAL: 'time_total'>,
+    'state_translations': None,
+    'translation_key': 'last_operation_duration',
+    'translation_string': 'Last operation duration',
+  })
+# ---
+# name: test_entities[cl_lfkr93x0ukp5gaia.json][time_total-state]
+  dict({
+    'dp_code': <TuyaDPCode.TIME_TOTAL: 'time_total'>,
+    'state': 0.0,
+    'unit': 'ms',
+  })
+# ---
